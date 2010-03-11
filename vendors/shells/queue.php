@@ -47,7 +47,6 @@
 		 * @access public
 		 */
 		public function initialize() {
-			
 			// Merge our parameters with our settings
 			$this->settings = am(
 				$this->settings,
@@ -70,7 +69,6 @@
 			if (!App::import('Lib', 'Mailer.transport')) {
 				throw new RuntimeException('Could not load Mailer_Transport interface');
 			}
-			
 		}
 		
 		/**
@@ -86,7 +84,6 @@
 					$this->_renderMessage($message)
 				);
 			}
-			
 		}
 		
 		/**
@@ -96,44 +93,49 @@
 		 * @access private
 		 */
 		private function _renderMessage($message) {
-			
 			extract($message['Message']);
 			$view = $this->_constructView($message);
 			return $view->render($template, $layout);
-			
 		}
 		
 		/**
-		 * Constructs a new View object and readies it for mailing.
+		 * Constructs a new View object, applies any variables, sets the locations
+		 * for its rendering files and returns the object.
 		 * @param array $message
 		 * @return View
 		 * @access private
 		 */
 		private function _constructView($message) {
-			
 			extract($this->settings);
 			$object = new View(new Controller());
 			$object->set($this->_extractVariables($message));
 			$object->layoutPath = '..' . DS . $views . DS . 'layouts';
 			$object->viewPath = $views;
 			return $object;
-			
 		}
 		
 		/**
-		 * Constructs our Transport object
+		 * Constructs and returns our transport object.
 		 * @return Mailer_Transport
 		 * @access private
 		 */
 		private function _constructTransport() {
-			
 			extract($this->settings);
-			if (!App::import('Lib', 'Mailer.transports/'.$transport)) {
-				throw new RuntimeException('Could not load the "'.$transport.'" transport');
-			}
 			$class = 'Mailer_Transports_' . Inflector::camelize($transport);
-			return new $class;
-			
+			// Can we import the file?
+			if (!App::import('Lib', 'Mailer.transports/'.$transport)) {
+				throw new RuntimeException('Could not locate the "'.$transport.'" transport');
+			}
+			// Does the expected class exist?
+			if (!class_exists($class)) {
+				throw new RuntimeException('Could not locate the "'.$class.'" class');
+			}
+			// Does it inplement our interface?
+			if (!in_array('Mailer_Transport', class_implements($class))) {
+				throw new RuntimeException('The "'.$class.'" class must implement the "Mailer_Transport" interface');
+			}
+			// All good, construct and fire off
+			return new $class();
 		}
 		
 		/**
@@ -144,25 +146,25 @@
 		 * @access private
 		 */
 		private function _extractVariables($array = array()) {
-			
-			$variables = Set::combine($array,
-				'/MessageRecipientVariable/key',
-				'/MessageRecipientVariable/value'
-			);
-			foreach ($variables as &$variable) {
-				$variable = unserialize($variable);
+			$variables = array();
+			if (is_array($array) and !empty($array)) {
+				$variables = Set::combine($array,
+					'/MessageRecipientVariable/key',
+					'/MessageRecipientVariable/value'
+				);
+				foreach ($variables as &$variable) {
+					$variable = unserialize($variable);
+				}
 			}
 			return $variables;
-			
 		}
 		
 		/**
-		 * Bind up our models
+		 * Forcibly setup the associations for our models.
 		 * @return null
 		 * @access private
 		 */
 		private function _bindModels() {
-			
 			$this->MessageRecipient->bindModel(array(
 				'hasMany' => array(
 					'MessageRecipientVariable',
@@ -177,16 +179,15 @@
 					'MessageRecipient'
 				)
 			));
-			
 		}
 		
 		/**
-		 * Returns an array of messages that are eligible for mailing.
+		 * Returns an array of messages that are eligible for mailing. Takes into
+		 * account the shell's configuration settings.
 		 * @return array
 		 * @access private
 		 */
 		private function _getEligibleMessages() {
-			
 			extract($this->settings);
 			return $this->MessageRecipient->find('all', array(
 				'conditions' => array(
@@ -197,7 +198,6 @@
 				),
 				'limit' => $limit
 			));
-			
 		}
 		
 	}
