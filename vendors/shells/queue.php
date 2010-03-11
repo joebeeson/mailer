@@ -2,7 +2,7 @@
 
 	/**
 	 * Performs the actual mailing of the queued messages.
-	 * @author Joe Beeson <joeb@weaver-group.com>
+	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class QueueShell extends Shell {
 		

@@ -3,7 +3,7 @@
 	/**
 	 * Component for creating/managing outgoing emails for mailing with the
 	 * Mailer plugin system.
-	 * @author Joe Beeson <joeb@weaver-group.com>
+	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class QueueComponent extends Object {
 
