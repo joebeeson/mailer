@@ -41,7 +41,6 @@
 		 * @access public
 		 */
 		public function initialize() {
-			
 			// Call our parent's initialize()
 			parent::initialize();
 			
