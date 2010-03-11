@@ -70,7 +70,8 @@
 			} else {
 				extract($this->message['Message']);
 				$view = $this->_constructView();
-				return $view->render($template, $layout);
+				// Yes error suppression is evil, sorry.
+				return @$view->render($template, $layout);
 			}
 		}
 		

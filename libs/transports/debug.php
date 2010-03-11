@@ -8,18 +8,20 @@
 	class Mailer_Transports_Debug extends Mailer_Transport {
 		
 		/**
-		 * Sends the $payload
+		 * Sends the message.
+		 * @return boolean
+		 * @access protected
 		 */
-		public function sendMessage($message, $payload) {
+		protected function _send() {
 			if ($this->_inCli()) {
-				extract($message['Message']);
-				echo 'From   : ' . $message['Message']['from'] . PHP_EOL;
-				echo 'To     : ' . $message['MessageRecipient']['recipient'] . PHP_EOL;
-				echo 'Subject: ' . $message['Message']['subject'] . PHP_EOL;
+				echo 'From   : ' . $this->message['Message']['from'] . PHP_EOL;
+				echo 'To     : ' . $this->message['MessageRecipient']['recipient'] . PHP_EOL;
+				echo 'Subject: ' . $this->message['Message']['subject'] . PHP_EOL;
 				echo '----------------------------------------------------' . PHP_EOL;
-				echo $payload;
+				echo $this->payload;
 				echo PHP_EOL . PHP_EOL;
 			}
+			return true;
 		}
 		
 		/**

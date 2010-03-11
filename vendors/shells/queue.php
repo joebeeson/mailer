@@ -17,8 +17,8 @@
 		 */
 		public $uses = array(
 			'Mailer.Message',
+			'Mailer.MessageRecipientVariable',
 			'Mailer.MessageRecipient',
-			'Mailer.MessageRecipientVariable'
 		);
 		
 		/**
@@ -53,7 +53,7 @@
 			// The transport to use for mailing
 			'transport' => 'debug'
 		);
-
+		
 		/**
 		 * Startup method
 		 * @return null
@@ -62,9 +62,6 @@
 		public function startup() {
 			// Setup our RenderTask path...
 			$this->Render->setPath($this->settings['views']);
-			
-			// Bind our models
-			$this->_bindModels();
 			
 			// Load up our required libraries
 			if (!App::import('Lib', 'Mailer.transport')) {
@@ -75,6 +72,15 @@
 			if ($this->settings['test']) {
 				$this->info('Entering testing mode...');
 			}
+			
+			/**
+			 * For some reason ClassRegistry is giving us AppModel in place of
+			 * the actual MessageRecipient model and I have no idea why yet. So
+			 * this gets around that and reloads our models.
+			 */
+			ClassRegistry::removeObject('message_recipient');
+			require(realpath(dirname(__FILE__).'/../../models/message_recipient.php'));
+			$this->_loadModels();
 		}
 		
 		/**
@@ -83,36 +89,53 @@
 		 * @access public
 		 */
 		public function process() {
-			$transport = $this->_constructTransport();
+			extract($this->settings);
+			// Build our Transport and retrieve eligible messages
+			$transport = $this->Transport->construct($transport);
 			$messages  = $this->_getEligibleMessages();
 			$this->info('Found '.count($messages).' messages for processing...');
+			
+			// Loop through our messages and send them out
 			foreach ($messages as $message) {
+				// Performm some debugging then set our message and payload
 				$this->Debug->message($message);
-				echo $this->Render->message($message);
-				die;
+				$transport->setMessage($message);
+				$transport->setPayload($this->Render->message($message));
+				
+				if (!$test) {
+					// Only actually send the message if we're not testing
+					$success = $transport->sendMessage();
+					$method  = ($success ? '_markSuccessful' : '_markUnsuccessful');
+					$this->debug('Message was '.($success ? 'successfully' : 'not').' sent...');
+					$this->$method($message);
+				} else {
+					// We're just testing, let the person know if in debug
+					$this->debug('Skipping message transmission, in testing mode...');
+				}
+				
 			}
 		}
 		
 		/**
-		 * Forcibly setup the associations for our models.
+		 * Marks the $message as processed
+		 * @param array $message
 		 * @return null
 		 * @access private
 		 */
-		private function _bindModels() {
-			$this->MessageRecipient->bindModel(array(
-				'hasMany' => array(
-					'MessageRecipientVariable',
-					'MessageRecipientAttachment'
-				),
-				'belongsTo' => array(
-					'Message'
-				)
-			));
-			$this->Message->bindModel(array(
-				'hasMany' => array(
-					'MessageRecipient'
-				)
-			));
+		private function _markSuccessful($message = array()) {
+			$message['MessageRecipient']['processed'] = 1;
+			$this->MessageRecipient->save($message['MessageRecipient']);
+		}
+		
+		/**
+		 * Increments the $message's tries counter
+		 * @param array $message
+		 * @return null
+		 * @access private
+		 */
+		private function _markUnsuccessful($message = array()) {
+			$message['MessageRecipient']['tries']++;
+			$this->MessageRecipient->save($message['MessageRecipient']);
 		}
 		
 		/**
@@ -129,6 +152,9 @@
 					'`MessageRecipient`.`tries` <= ' . $tries,
 					// Only get messages that haven't yet been processed
 					'`MessageRecipient`.`processed`' => 0
+				),
+				'contain' => array(
+					'Message'
 				),
 				'limit' => $limit
 			));
