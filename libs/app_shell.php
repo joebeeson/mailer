@@ -57,13 +57,26 @@
 		}
 		
 		/**
+		 * Allow read access to our non-public member variables
+		 * @param string $variable
+		 * @return mixed
+		 * @access public
+		 * @final
+		 */
+		final public function __get($variable) {
+			if (isset($this->$variable)) {
+				return $this->$variable;
+			}
+		}
+		
+		/**
 		 * Displays a debug message if we're debugging and not silent.
 		 * @param string $message
 		 * @return null
-		 * @access protected
+		 * @access public
 		 * @final
 		 */
-		final protected function debug($message = '') {
+		final public function debug($message = '') {
 			if ($this->debug and !$this->silent) {
 				$this->out('DEBUG: '.$message);
 			}
@@ -73,10 +86,10 @@
 		 * Displays an informational message if we're not silent.
 		 * @param string $message
 		 * @return null
-		 * @access protected
+		 * @access public
 		 * @final
 		 */
-		final protected function info($message = '') {
+		final public function info($message = '') {
 			if (!$this->silent) {
 				$this->out('INFO : '.$message);
 			}
@@ -86,10 +99,10 @@
 		 * Displays a warning message.
 		 * @param string $message
 		 * @return null
-		 * @access protected
+		 * @access public
 		 * @final
 		 */
-		final protected function warn($message = '') {
+		final public function warn($message = '') {
 			$this->out('WARN : '.$message);
 		}
 		

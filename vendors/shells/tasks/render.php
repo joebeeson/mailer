@@ -56,12 +56,12 @@
 		}
 		
 		/**
-		 * Renders an email.
+		 * Renders an email message.
 		 * @param array $message
 		 * @return string
 		 * @access public
 		 */
-		public function render($message = array()) {
+		public function message($message = array()) {
 			if (!empty($message)) {
 				$this->setMessage($message);
 			}

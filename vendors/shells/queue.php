@@ -27,7 +27,9 @@
 		 * @access public
 		 */
 		public $tasks = array(
-			'Render'
+			'Render',
+			'Transport',
+			'Debug'
 		);
 		
 		/**
@@ -36,7 +38,6 @@
 		 * @access public
 		 */
 		public $settings = array(
-		
 			// The number of messages to mail at once
 			'limit' => 50,
 			
@@ -51,7 +52,6 @@
 			
 			// The transport to use for mailing
 			'transport' => 'debug'
-			
 		);
 
 		/**
@@ -70,6 +70,11 @@
 			if (!App::import('Lib', 'Mailer.transport')) {
 				throw new RuntimeException('Could not load Mailer_Transport interface');
 			}
+			
+			// Alert to any testing mode
+			if ($this->settings['test']) {
+				$this->info('Entering testing mode...');
+			}
 		}
 		
 		/**
@@ -79,34 +84,13 @@
 		 */
 		public function process() {
 			$transport = $this->_constructTransport();
-			foreach ($this->_getEligibleMessages() as $message) {
-				echo $this->Render->render($message);
+			$messages  = $this->_getEligibleMessages();
+			$this->info('Found '.count($messages).' messages for processing...');
+			foreach ($messages as $message) {
+				$this->Debug->message($message);
+				echo $this->Render->message($message);
 				die;
 			}
-		}
-		
-		/**
-		 * Constructs and returns our transport object.
-		 * @return Mailer_Transport
-		 * @access private
-		 */
-		private function _constructTransport() {
-			extract($this->settings);
-			$class = 'Mailer_Transports_' . Inflector::camelize($transport);
-			// Can we import the file?
-			if (!App::import('Lib', 'Mailer.transports/'.$transport)) {
-				throw new RuntimeException('Could not locate the "'.$transport.'" transport');
-			}
-			// Does the expected class exist?
-			if (!class_exists($class)) {
-				throw new RuntimeException('Could not locate the "'.$class.'" class');
-			}
-			// Does it inplement our interface?
-			if (get_parent_class($class) != 'Mailer_Transport') {
-				throw new RuntimeException('The "'.$class.'" class must extend the "Mailer_Transport" class');
-			}
-			// All good, construct and fire off
-			return new $class();
 		}
 		
 		/**
