@@ -1,10 +1,14 @@
 <?php
 
+	// Bring in our AppShell library...
+	App::import('Lib', 'Mailer.app_shell');
+
 	/**
+	 * QueueShell
 	 * Performs the actual mailing of the queued messages.
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
-	class QueueShell extends Shell {
+	class QueueShell extends AppShell {
 		
 		/**
 		 * Models
@@ -15,6 +19,15 @@
 			'Mailer.Message',
 			'Mailer.MessageRecipient',
 			'Mailer.MessageRecipientVariable'
+		);
+		
+		/**
+		 * Tasks
+		 * @var array
+		 * @access public
+		 */
+		public $tasks = array(
+			'Render'
 		);
 		
 		/**
@@ -42,30 +55,18 @@
 		);
 
 		/**
-		 * Initialization method
+		 * Startup method
 		 * @return null
 		 * @access public
 		 */
-		public function initialize() {
-			// Merge our parameters with our settings
-			$this->settings = am(
-				$this->settings,
-				$this->params
-			);
-			
-			// Setup our models for later
-			foreach ($this->uses as $model) {
-				$model = ClassRegistry::init($model);
-				$this->{$model->alias} = $model;
-			}
+		public function startup() {
+			// Setup our RenderTask path...
+			$this->Render->setPath($this->settings['views']);
 			
 			// Bind our models
 			$this->_bindModels();
 			
-			// Get our required libraries
-			if (!App::import('Core', array('View', 'Controller'))) {
-				throw new RuntimeException('Could not load View or Controller');
-			}
+			// Load up our required libraries
 			if (!App::import('Lib', 'Mailer.transport')) {
 				throw new RuntimeException('Could not load Mailer_Transport interface');
 			}
@@ -79,39 +80,9 @@
 		public function process() {
 			$transport = $this->_constructTransport();
 			foreach ($this->_getEligibleMessages() as $message) {
-				$transport->sendMessage(
-					$message,
-					$this->_renderMessage($message)
-				);
+				echo $this->Render->render($message);
+				die;
 			}
-		}
-		
-		/**
-		 * Returns a rendered message for mailing.
-		 * @param array $message
-		 * @return string
-		 * @access private
-		 */
-		private function _renderMessage($message) {
-			extract($message['Message']);
-			$view = $this->_constructView($message);
-			return $view->render($template, $layout);
-		}
-		
-		/**
-		 * Constructs a new View object, applies any variables, sets the locations
-		 * for its rendering files and returns the object.
-		 * @param array $message
-		 * @return View
-		 * @access private
-		 */
-		private function _constructView($message) {
-			extract($this->settings);
-			$object = new View(new Controller());
-			$object->set($this->_extractVariables($message));
-			$object->layoutPath = '..' . DS . $views . DS . 'layouts';
-			$object->viewPath = $views;
-			return $object;
 		}
 		
 		/**
@@ -131,32 +102,11 @@
 				throw new RuntimeException('Could not locate the "'.$class.'" class');
 			}
 			// Does it inplement our interface?
-			if (!in_array('Mailer_Transport', class_implements($class))) {
-				throw new RuntimeException('The "'.$class.'" class must implement the "Mailer_Transport" interface');
+			if (get_parent_class($class) != 'Mailer_Transport') {
+				throw new RuntimeException('The "'.$class.'" class must extend the "Mailer_Transport" class');
 			}
 			// All good, construct and fire off
 			return new $class();
-		}
-		
-		/**
-		 * Extracts and unserialize()s any MessageRecipientVariable records from
-		 * the $array we're given.
-		 * @param array $array
-		 * @return array
-		 * @access private
-		 */
-		private function _extractVariables($array = array()) {
-			$variables = array();
-			if (is_array($array) and !empty($array)) {
-				$variables = Set::combine($array,
-					'/MessageRecipientVariable/key',
-					'/MessageRecipientVariable/value'
-				);
-				foreach ($variables as &$variable) {
-					$variable = unserialize($variable);
-				}
-			}
-			return $variables;
 		}
 		
 		/**

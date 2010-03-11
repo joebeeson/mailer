@@ -5,7 +5,7 @@
 	 * Default transport used for debugging purposes.
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
-	class Mailer_Transports_Debug implements Mailer_Transport {
+	class Mailer_Transports_Debug extends Mailer_Transport {
 		
 		/**
 		 * Sends the $payload

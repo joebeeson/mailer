@@ -1,5 +1,5 @@
 <?php
-
+	
 	class Message extends MailerAppModel {
 
 		/**

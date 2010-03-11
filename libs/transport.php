@@ -4,15 +4,19 @@
 	 * Mailer_Transport
 	 * Acts as a base class for all Transports
 	 * @author Joe Beeson <jbeeson@gmail.com>
+	 * @abstract
 	 */
-	interface Mailer_Transport {
+	abstract class Mailer_Transport {
 		
 		/**
-		 * Method to create and send a message. Should return boolean to indicate
-		 * success of the sending.
+		 * Method to send a message. Should return boolean to indicate success 
+		 * of the mailing, if possible.
 		 * @param array $message
+		 * @param string $payload
 		 * @return boolean
+		 * @access
+		 * @abstract
 		 */
-		public function sendMessage($message, $payload);
+		abstract public function sendMessage($message, $payload);
 		
 	}
