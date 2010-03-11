@@ -34,7 +34,10 @@
 			'tries' => 3,
 			
 			// Directory to look for our views to use
-			'views' => 'email'
+			'views' => 'email',
+			
+			// The transport to use for mailing
+			'transport' => 'debug'
 			
 		);
 
@@ -62,8 +65,12 @@
 			
 			// Get our required libraries
 			if (!App::import('Core', array('View', 'Controller'))) {
-				throw new RuntimeException('Cannot load required libraries');
+				throw new RuntimeException('Could not load View or Controller');
 			}
+			if (!App::import('Lib', 'Mailer.transport')) {
+				throw new RuntimeException('Could not load Mailer_Transport interface');
+			}
+			
 		}
 		
 		/**
@@ -72,9 +79,14 @@
 		 * @access public
 		 */
 		public function process() {
+			$transport = $this->_constructTransport();
 			foreach ($this->_getEligibleMessages() as $message) {
-				$message = $this->_renderMessage($message);
+				$transport->sendMessage(
+					$message,
+					$this->_renderMessage($message)
+				);
 			}
+			
 		}
 		
 		/**
@@ -84,9 +96,11 @@
 		 * @access private
 		 */
 		private function _renderMessage($message) {
+			
 			extract($message['Message']);
 			$view = $this->_constructView($message);
 			return $view->render($template, $layout);
+			
 		}
 		
 		/**
@@ -96,12 +110,30 @@
 		 * @access private
 		 */
 		private function _constructView($message) {
+			
 			extract($this->settings);
 			$object = new View(new Controller());
 			$object->set($this->_extractVariables($message));
 			$object->layoutPath = '..' . DS . $views . DS . 'layouts';
 			$object->viewPath = $views;
 			return $object;
+			
+		}
+		
+		/**
+		 * Constructs our Transport object
+		 * @return Mailer_Transport
+		 * @access private
+		 */
+		private function _constructTransport() {
+			
+			extract($this->settings);
+			if (!App::import('Lib', 'Mailer.transports/'.$transport)) {
+				throw new RuntimeException('Could not load the "'.$transport.'" transport');
+			}
+			$class = 'Mailer_Transports_' . Inflector::camelize($transport);
+			return new $class;
+			
 		}
 		
 		/**
@@ -112,6 +144,7 @@
 		 * @access private
 		 */
 		private function _extractVariables($array = array()) {
+			
 			$variables = Set::combine($array,
 				'/MessageRecipientVariable/key',
 				'/MessageRecipientVariable/value'
@@ -120,6 +153,7 @@
 				$variable = unserialize($variable);
 			}
 			return $variables;
+			
 		}
 		
 		/**
@@ -128,6 +162,7 @@
 		 * @access private
 		 */
 		private function _bindModels() {
+			
 			$this->MessageRecipient->bindModel(array(
 				'hasMany' => array(
 					'MessageRecipientVariable',
@@ -142,6 +177,7 @@
 					'MessageRecipient'
 				)
 			));
+			
 		}
 		
 		/**
@@ -150,6 +186,7 @@
 		 * @access private
 		 */
 		private function _getEligibleMessages() {
+			
 			extract($this->settings);
 			return $this->MessageRecipient->find('all', array(
 				'conditions' => array(
@@ -160,6 +197,7 @@
 				),
 				'limit' => $limit
 			));
+			
 		}
 		
 	}
