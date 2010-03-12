@@ -88,6 +88,29 @@
 		}
 		
 		/**
+		 * Cleans up processed messages
+		 * @return null
+		 * @access public
+		 */
+		public function cleanup() {
+			extract($this->settings);
+			$messages = $this->_getProcessedMessages();
+			$this->info('Found '.count($messages).' messages for cleanup...');
+			$deleted  = 0;
+			foreach ($messages as $message) {
+				if (!$test) {
+					$this->debug('Deleting MessageRecipient '.$message['MessageRecipient']['id']);
+					if ($this->MessageRecipient->delete($message['MessageRecipient']['id'])) {
+						$deleted++;
+					}
+				} else {
+					$this->debug('Skipping deletion, in testing mode.');
+				}
+			}
+			echo $this->info('Successfully cleaned up '.$deleted.' messages');
+		}
+		
+		/**
 		 * Retrieves messages from the queue and mails them out.
 		 * @return null
 		 * @access public
@@ -125,6 +148,21 @@
 			$message = new Mailer_Message($message);
 			$this->Debug->message($message);
 			return $message;
+		}
+		
+		/**
+		 * Returns an array of messages that have been sent.
+		 * @return array
+		 * @access private
+		 */
+		private function _getProcessedMessages() {
+			return $this->MessageRecipient->find('all', array(
+				'conditions' => array(
+
+					// Only get MessageRecipient that have been sent
+					'`MessageRecipient`.`processed`' => 1
+				)
+			));
 		}
 		
 		/**
