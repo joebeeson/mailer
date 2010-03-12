@@ -56,23 +56,41 @@
 		}
 		
 		/**
-		 * Renders an email message.
-		 * @param array $message
+		 * Returns the rendered text string for the $message
+		 * @param Mailer_Message_Object $message
 		 * @return string
 		 * @access public
 		 */
-		public function message($message = array()) {
-			if (!empty($message)) {
-				$this->setMessage($message);
-			}
-			if (empty($this->message)) {
-				throw new RuntimeException('RenderTask::render() requires $message to be non-empty');
-			} else {
-				extract($this->message['Message']);
-				$view = $this->_constructView();
-				// Yes error suppression is evil, sorry.
-				return @$view->render($template, $layout);
-			}
+		public function html(Mailer_Message_Object $message) {
+			return $this->_render(
+				$message,
+				'html'
+			);
+		}
+		
+		/**
+		 * Returns the rendered text string for the $message
+		 * @param Mailer_Message_Object $message
+		 * @return string
+		 * @access public
+		 */
+		public function text(Mailer_Message_Object $message) {
+			return $this->_render(
+				$message,
+				'text'
+			);
+		}
+		
+		private function _render(Mailer_Message_Object $message, $type = 'text') {
+			// Construct our view and set our message variables to it
+			$view = $this->_constructView($message);
+			$view->set($message->variables);
+			
+			// Return our rendered our specific type
+			return $view->render(
+				$type . DS . $message->template, 
+				$type . DS . $message->layout
+			);
 		}
 		
 		/**
@@ -87,31 +105,7 @@
 			$object = new View(new Controller());
 			$object->layoutPath = '..' . DS . $this->path . DS . 'layouts';
 			$object->viewPath = $this->path;
-			// Attach any variables to the View
-			$object->set($this->_extractVariables());
 			return $object;
-		}
-		
-		/**
-		 * Extracts and unserialize()s any MessageRecipientVariable records from
-		 * the $array we're given.
-		 * @param array $array
-		 * @return array
-		 * @access private
-		 */
-		private function _extractVariables($array = array()) {
-			$array = (!empty($array) ? $array : $this->message);
-			$variables = array();
-			if (is_array($array) and !empty($array)) {
-				$variables = Set::combine($array,
-					'/MessageRecipientVariable/key',
-					'/MessageRecipientVariable/value'
-				);
-				foreach ($variables as &$variable) {
-					$variable = unserialize($variable);
-				}
-			}
-			return $variables;
 		}
 		
 	}

@@ -60,12 +60,13 @@
 		 * @access public
 		 */
 		public function startup() {
+			
 			// Setup our RenderTask path...
 			$this->Render->setPath($this->settings['views']);
 			
 			// Load up our required libraries
-			if (!App::import('Lib', 'Mailer.transport')) {
-				throw new RuntimeException('Could not load Mailer_Transport interface');
+			if (!App::import('Lib', array('Mailer.transport', 'Mailer.message_object'))) {
+				throw new RuntimeException('Could not load required libraries');
 			}
 			
 			// Alert to any testing mode
@@ -90,6 +91,7 @@
 		 */
 		public function process() {
 			extract($this->settings);
+			
 			// Build our Transport and retrieve eligible messages
 			$transport = $this->Transport->construct($transport);
 			$messages  = $this->_getEligibleMessages();
@@ -97,10 +99,13 @@
 			
 			// Loop through our messages and send them out
 			foreach ($messages as $message) {
-				// Performm some debugging then set our message and payload
+				
+				// Construct the Mailer_Message_Object, debug it and send it out
+				$message = new Mailer_Message_Object($message);
 				$this->Debug->message($message);
-				$transport->setMessage($message);
-				$transport->setPayload($this->Render->message($message));
+				$transport->sendMessage($message);
+				
+				die;
 				
 				if (!$test) {
 					// Only actually send the message if we're not testing

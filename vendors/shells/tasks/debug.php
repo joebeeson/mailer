@@ -13,13 +13,12 @@
 		 * @return null
 		 * @access private
 		 */
-		public function message($message = array()) {
+		public function message(Mailer_Message_Object $message) {
 			if ($this->debug) {
 				$this->hr();
-				$this->debug('     ID: '.$message['MessageRecipient']['id']);
-				$this->debug('   From: '.$message['Message']['from']);
-				$this->debug('     To: '.$message['MessageRecipient']['recipient']);
-				$this->debug('Subject: '.$message['Message']['subject']);
+				$this->debug('   From: '.$message->sender);
+				$this->debug('     To: '.$message->recipient);
+				$this->debug('Subject: '.$message->subject);
 				$this->hr();
 			}
 		}
