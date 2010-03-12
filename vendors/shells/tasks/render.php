@@ -57,11 +57,11 @@
 		
 		/**
 		 * Returns the rendered text string for the $message
-		 * @param Mailer_Message_Object $message
+		 * @param Mailer_Message $message
 		 * @return string
 		 * @access public
 		 */
-		public function html(Mailer_Message_Object $message) {
+		public function html(Mailer_Message $message) {
 			return $this->_render(
 				$message,
 				'html'
@@ -70,18 +70,18 @@
 		
 		/**
 		 * Returns the rendered text string for the $message
-		 * @param Mailer_Message_Object $message
+		 * @param Mailer_Message $message
 		 * @return string
 		 * @access public
 		 */
-		public function text(Mailer_Message_Object $message) {
+		public function text(Mailer_Message $message) {
 			return $this->_render(
 				$message,
 				'text'
 			);
 		}
 		
-		private function _render(Mailer_Message_Object $message, $type = 'text') {
+		private function _render(Mailer_Message $message, $type = 'text') {
 			// Construct our view and set our message variables to it
 			$view = $this->_constructView($message);
 			$view->set($message->variables);

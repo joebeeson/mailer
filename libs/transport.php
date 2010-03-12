@@ -10,58 +10,41 @@
 		
 		/**
 		 * Message
-		 * @var array
+		 * @var Mailer_Message
 		 * @access protected
 		 */
 		protected $message;
 		
 		/**
-		 * Payload
-		 * @var string
-		 * @access protected
-		 */
-		protected $payload;
-		
-		/**
 		 * Sets our $message member variable. This can be overridden in child
 		 * classes to perform needed operations.
-		 * @param array $message
+		 * @param Mailer_Message $message
 		 * @return boolean
 		 * @access public
 		 */
-		public function setMessage($message = array()) {
+		public function setMessage(Mailer_Message $message) {
 			$this->message = $message;
 			return true;
 		}
 		
 		/**
-		 * Sets our $payload member variable. This can be overridden in child
-		 * classes to perform needed operations.
-		 * @param string $payload
+		 * Convenience method for performing setMessage() and send()
+		 * @param Mailer_Message $message
 		 * @return boolean
 		 * @access public
 		 */
-		public function setPayload($payload = '') {
-			$this->payload = $payload;
-			return true;
+		public function sendMessage(Mailer_Message $message) {
+			if ($this->setMessage($message)) {
+				return $this->send();
+			}
+			return false;
 		}
 		
 		/**
-		 * Sends the requested message. If no parameters are passed it will assume
-		 * you mean the currently available member variables.
-		 * @param string $payload
-		 * @param array $message
+		 * Performs the message sending. Returns boolean for success
 		 * @return boolean
 		 * @access public
 		 */
-		final public function sendMessage($payload = '', $message = array()) {
-			if (!empty($message)) {
-				$this->setMessage($message);
-			}
-			if (!empty($payload)) {
-				$this->setPayload($payload);
-			}
-			return $this->_send();
-		}
+		abstract public function send();
 		
 	}

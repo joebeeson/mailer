@@ -9,11 +9,11 @@
 
 		/**
 		 * Displays a handful of useful debugging messages
-		 * @param array $message
+		 * @param Mailer_Message $message
 		 * @return null
 		 * @access private
 		 */
-		public function message(Mailer_Message_Object $message) {
+		public function message(Mailer_Message $message) {
 			if ($this->debug) {
 				$this->hr();
 				$this->debug('   From: '.$message->sender);

@@ -1,11 +1,11 @@
 <?php
 	
 	/**
-	 * Mailer_Message_Object
+	 * Mailer_Message
 	 * Represents a message.
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
-	class Mailer_Message_Object {
+	class Mailer_Message {
 		
 		/**
 		 * Recipient
@@ -161,7 +161,7 @@
 		 * @access public
 		 */
 		public function getRenderedText() {
-			
+			return ClassRegistry::getObject('Shell')->Render->text($this);
 		}
 		
 		/**

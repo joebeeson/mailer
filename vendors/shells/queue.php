@@ -60,14 +60,13 @@
 		 * @access public
 		 */
 		public function startup() {
+			// Load up our required libraries
+			$libraries = realpath(dirname(__FILE__) .DS. '..' .DS. '..' .DS. 'libs');
+			require($libraries . DS . 'transport.php');
+			require($libraries . DS . 'message.php');
 			
 			// Setup our RenderTask path...
 			$this->Render->setPath($this->settings['views']);
-			
-			// Load up our required libraries
-			if (!App::import('Lib', array('Mailer.transport', 'Mailer.message_object'))) {
-				throw new RuntimeException('Could not load required libraries');
-			}
 			
 			// Alert to any testing mode
 			if ($this->settings['test']) {
@@ -100,49 +99,27 @@
 			// Loop through our messages and send them out
 			foreach ($messages as $message) {
 				
-				// Construct the Mailer_Message_Object, and send it out
+				// Construct the Mailer_Message, and send it out
 				$message = $this->_constructMessageObject($message);
+				$transport->sendMessage($message);
 				
 				/**
-				 * TODO: Change up the Transport objects so that they will accept
-				 * a Mailer_Message_Object for mailing.
+				 * TODO: Lots
 				 */
 				
 			}
 		}
 		
 		/**
-		 * Convenience method for constructing a new Mailer_Message_Object
+		 * Convenience method for constructing a new Mailer_Message
 		 * @param array $message
-		 * @return Mailer_Message_Object
+		 * @return Mailer_Message
 		 * @access private
 		 */
 		private function _constructMessageObject($message = array()) {
-			$message = new Mailer_Message_Object($message);
+			$message = new Mailer_Message($message);
 			$this->Debug->message($message);
 			return $message;
-		}
-		
-		/**
-		 * Marks the $message as processed
-		 * @param array $message
-		 * @return null
-		 * @access private
-		 */
-		private function _markSuccessful($message = array()) {
-			$message['MessageRecipient']['processed'] = 1;
-			$this->MessageRecipient->save($message['MessageRecipient']);
-		}
-		
-		/**
-		 * Increments the $message's tries counter
-		 * @param array $message
-		 * @return null
-		 * @access private
-		 */
-		private function _markUnsuccessful($message = array()) {
-			$message['MessageRecipient']['tries']++;
-			$this->MessageRecipient->save($message['MessageRecipient']);
 		}
 		
 		/**

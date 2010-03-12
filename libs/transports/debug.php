@@ -8,17 +8,17 @@
 	class Mailer_Transports_Debug extends Mailer_Transport {
 		
 		/**
-		 * Sends the message.
+		 * Sends the current message.
 		 * @return boolean
-		 * @access protected
+		 * @access public
 		 */
-		protected function _send() {
+		public function send() {
 			if ($this->_inCli()) {
-				echo 'From   : ' . $this->message['Message']['from'] . PHP_EOL;
-				echo 'To     : ' . $this->message['MessageRecipient']['recipient'] . PHP_EOL;
-				echo 'Subject: ' . $this->message['Message']['subject'] . PHP_EOL;
+				echo 'From   : ' . $this->message->sender    . PHP_EOL;
+				echo 'To     : ' . $this->message->recipient . PHP_EOL;
+				echo 'Subject: ' . $this->message->subject   . PHP_EOL;
 				echo '----------------------------------------------------' . PHP_EOL;
-				echo $this->payload;
+				echo $this->message->getRenderedText();
 				echo PHP_EOL . PHP_EOL;
 			}
 			return true;
