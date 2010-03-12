@@ -61,6 +61,8 @@
 		 * @access public
 		 */
 		public function startup() {
+			// This could take awhile...
+			set_time_limit(0);
 			
 			// Load up our required libraries
 			$libraries = realpath(dirname(__FILE__) .DS. '..' .DS. '..' .DS. 'libs');
@@ -106,6 +108,7 @@
 				
 				if (!$test) {
 					$success = $transport->sendMessage($message);
+					var_dump($success);
 				} else {
 					$this->debug('Testing mode, bypassing sendMessage()');
 				}

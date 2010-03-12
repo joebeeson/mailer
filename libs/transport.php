@@ -74,6 +74,19 @@
 					);
 				}
 			}
+			// Start any required initialization
+			$this->_initialize();
+		}
+		
+		/**
+		 * Initialization methods
+		 * @return null
+		 * @access protected
+		 */
+		protected function _initialize() {
+			/**
+			 * Initialization operations. 
+			 */
 		}
 		
 		/**
