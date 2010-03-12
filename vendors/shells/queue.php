@@ -100,25 +100,27 @@
 			// Loop through our messages and send them out
 			foreach ($messages as $message) {
 				
-				// Construct the Mailer_Message_Object, debug it and send it out
-				$message = new Mailer_Message_Object($message);
-				$this->Debug->message($message);
-				$transport->sendMessage($message);
+				// Construct the Mailer_Message_Object, and send it out
+				$message = $this->_constructMessageObject($message);
 				
-				die;
-				
-				if (!$test) {
-					// Only actually send the message if we're not testing
-					$success = $transport->sendMessage();
-					$method  = ($success ? '_markSuccessful' : '_markUnsuccessful');
-					$this->debug('Message was '.($success ? 'successfully' : 'not').' sent...');
-					$this->$method($message);
-				} else {
-					// We're just testing, let the person know if in debug
-					$this->debug('Skipping message transmission, in testing mode...');
-				}
+				/**
+				 * TODO: Change up the Transport objects so that they will accept
+				 * a Mailer_Message_Object for mailing.
+				 */
 				
 			}
+		}
+		
+		/**
+		 * Convenience method for constructing a new Mailer_Message_Object
+		 * @param array $message
+		 * @return Mailer_Message_Object
+		 * @access private
+		 */
+		private function _constructMessageObject($message = array()) {
+			$message = new Mailer_Message_Object($message);
+			$this->Debug->message($message);
+			return $message;
 		}
 		
 		/**
