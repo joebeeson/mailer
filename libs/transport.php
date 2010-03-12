@@ -16,6 +16,13 @@
 		protected $message;
 		
 		/**
+		 * Settings
+		 * @var array
+		 * @access protected
+		 */
+		protected $settings = array();
+		
+		/**
 		 * Sets our $message member variable. This can be overridden in child
 		 * classes to perform needed operations.
 		 * @param Mailer_Message $message
@@ -46,5 +53,83 @@
 		 * @access public
 		 */
 		abstract public function send();
+		
+		/**
+		 * Construction method
+		 * @return null
+		 * @access public
+		 */
+		public function __construct() {
+			if ($this->_configExists()) {
+				// We have a configuration file, load it up.
+				$settings = $this->_loadConfig($this->_loadConfig());
+				if (!is_array($settings)) {
+					// We did't get an array back
+					throw new RuntimeException('Mailer_Transport expects configuration file to return an array()');
+				} else {
+					// Merge in our settings
+					$this->settings = array_merge(
+						$this->settings,
+						$settings
+					);
+				}
+			}
+		}
+		
+		/**
+		 * Convenience method for retrieving a configuration setting. Uses the
+		 * CakePHP Set::classicExtract() dot notation for traversing an array.
+		 * @param string $path
+		 * @return mixed
+		 * @access protected
+		 */
+		protected function _getSetting($path = '') {
+			return Set::classicExtract(
+				$this->settings, $path
+			);
+		}
+		
+		/**
+		 * Loads up our configuration file
+		 * @return null
+		 * @access protected
+		 */
+		protected function _loadConfig() {
+			return include(
+				$this->_configDirectory() . $this->_configFile()
+			);
+		}
+		
+		/**
+		 * Checks if we have a configuration file.
+		 * @return boolean
+		 * @access protected
+		 */
+		protected function _configExists() {
+			return file_exists(
+				$this->_configDirectory() . $this->_configFile()
+			);
+		}
+		
+		/**
+		 * Convenience method for returning the configuration directory
+		 * @return string
+		 * @access protected
+		 */
+		protected function _configDirectory() {
+			return realpath(
+				dirname(__FILE__) . DS . '..' . DS . 'config' . DS . 'transports'
+			) . DS;
+		}
+		
+		/**
+		 * Convenience method for returning the expected configuration filename
+		 * @return string
+		 * @access protected
+		 */
+		protected function _configFile() {
+			$class = substr(get_class($this), 18);
+			return Inflector::underscore($class) . '.php';
+		}
 		
 	}

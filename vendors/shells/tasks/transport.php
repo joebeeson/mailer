@@ -17,12 +17,9 @@
 			if (!$this->_transportExists($transport)) {
 				throw new RuntimeException('No such transport, "'.$transport.'" exists');
 			} else {
-				if (!$this->_loadTransport($transport)) {
-					throw new RuntimeException('Could not load transport, "'.$transport.'"');
-				} else {
-					$className = $this->_transportClass($transport);
-					return new $className();
-				}
+				$this->_loadTransport($transport);
+				$className = $this->_transportClass($transport);
+				return new $className();
 			}
 		}
 		
@@ -73,15 +70,12 @@
 		/**
 		 * Loads the requested $transport
 		 * @param string $transport
-		 * @return boolean
+		 * @return null
 		 * @access private
 		 */
 		private function _loadTransport($transport = '') {
-			return App::import(
-				'Lib', 'Mailer.transports/'.$transport,
-				array(
-					'file' => $this->_transportFile($transport)
-				)
+			require(
+				$this->_transportDirectory() . $this->_transportFile($transport)
 			);
 		}
 		
