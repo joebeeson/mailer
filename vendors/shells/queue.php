@@ -5,13 +5,18 @@
 
 	/**
 	 * QueueShell
+	 * 
 	 * Performs the actual mailing of the queued messages.
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.vendors.shells
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class QueueShell extends AppShell {
 		
 		/**
 		 * Models
+		 * 
 		 * @var array
 		 * @access public
 		 */
@@ -23,6 +28,7 @@
 		
 		/**
 		 * Tasks
+		 * 
 		 * @var array
 		 * @access public
 		 */
@@ -34,6 +40,10 @@
 		
 		/**
 		 * Settings
+		 * 
+		 * These can be overridden by passing parameters to the shell.
+		 * Example: queue process -limit 10 -tries 3 -test -transport pear
+		 * 
 		 * @var array
 		 * @access public
 		 */
@@ -57,6 +67,7 @@
 		
 		/**
 		 * Startup method
+		 * 
 		 * @return null
 		 * @access public
 		 */
@@ -89,6 +100,7 @@
 		
 		/**
 		 * Retrieves messages from the queue and mails them out.
+		 * 
 		 * @return null
 		 * @access public
 		 */
@@ -135,6 +147,7 @@
 		
 		/**
 		 * Cleans up processed messages
+		 * 
 		 * @return null
 		 * @access public
 		 */
@@ -158,6 +171,7 @@
 		
 		/**
 		 * Convenience method for constructing a new Mailer_Message
+		 * 
 		 * @param array $message
 		 * @return Mailer_Message
 		 * @access private
@@ -170,6 +184,7 @@
 		
 		/**
 		 * Returns an array of messages that have been sent.
+		 * 
 		 * @return array
 		 * @access private
 		 */

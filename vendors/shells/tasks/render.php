@@ -2,27 +2,38 @@
 
 	/**
 	 * RenderTask
-	 * Handles the rendering of emails.
+	 * 
+	 * Handles functionality regarding rendering emails.
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.vendors.shells.tasks
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class RenderTask extends Shell {
 		
 		/**
 		 * Message
-		 * @var array
+		 * 
+		 * Holds our current Mailer_Message object
+		 * 
+		 * @var Mailer_Message
 		 * @access protected
 		 */
 		protected $message;
 		
 		/**
 		 * Path
-		 * @var array
+		 * 
+		 * The directory to look for our templates and layouts in.
+		 * 
+		 * @var string
 		 * @access protected
 		 */
 		protected $path = 'email';
 		
 		/**
 		 * Initialization method
+		 * 
 		 * @return null
 		 * @access public
 		 */
@@ -37,6 +48,7 @@
 		
 		/**
 		 * Sets our $message member variable.
+		 * 
 		 * @param array $array
 		 * @return null
 		 * @access public
@@ -47,6 +59,7 @@
 		
 		/**
 		 * Sets our $path member variable.
+		 * 
 		 * @param string $path
 		 * @return null
 		 * @access public
@@ -57,6 +70,7 @@
 		
 		/**
 		 * Returns the rendered text string for the $message
+		 * 
 		 * @param Mailer_Message $message
 		 * @return string
 		 * @access public
@@ -70,6 +84,7 @@
 		
 		/**
 		 * Returns the rendered text string for the $message
+		 * 
 		 * @param Mailer_Message $message
 		 * @return string
 		 * @access public
@@ -81,6 +96,14 @@
 			);
 		}
 		
+		/**
+		 * Returns the rendered $type for the passed $message
+		 * 
+		 * @param Mailer_Message $message
+		 * @param string $type
+		 * @return string
+		 * @access private
+		 */
 		private function _render(Mailer_Message $message, $type = 'text') {
 			// Construct our view and set our message variables to it
 			$view = $this->_constructView($message);
@@ -94,9 +117,9 @@
 		}
 		
 		/**
-		 * Constructs a new View object, applies any variables, sets the locations
-		 * for its rendering files and returns the object.
-		 * @param array $message
+		 * Constructs a new View object, sets the locations for its rendering 
+		 * files and returns the object.
+		 * 
 		 * @return View
 		 * @access private
 		 */

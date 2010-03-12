@@ -2,7 +2,11 @@
 	
 	/**
 	 * Mailer_Transport
+	 * 
 	 * Acts as a base class for all Transports
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.libs
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 * @abstract
 	 */
@@ -10,6 +14,7 @@
 		
 		/**
 		 * Message
+		 * 
 		 * @var Mailer_Message
 		 * @access protected
 		 */
@@ -17,6 +22,7 @@
 		
 		/**
 		 * Settings
+		 * 
 		 * @var array
 		 * @access protected
 		 */
@@ -25,6 +31,7 @@
 		/**
 		 * Sets our $message member variable. This can be overridden in child
 		 * classes to perform needed operations.
+		 * 
 		 * @param Mailer_Message $message
 		 * @return boolean
 		 * @access public
@@ -36,6 +43,7 @@
 		
 		/**
 		 * Convenience method for performing setMessage() and send()
+		 * 
 		 * @param Mailer_Message $message
 		 * @return boolean
 		 * @access public
@@ -49,6 +57,7 @@
 		
 		/**
 		 * Performs the message sending. Returns boolean for success
+		 * 
 		 * @return boolean
 		 * @access public
 		 */
@@ -56,6 +65,7 @@
 		
 		/**
 		 * Construction method
+		 * 
 		 * @return null
 		 * @access public
 		 */
@@ -80,6 +90,7 @@
 		
 		/**
 		 * Initialization methods
+		 * 
 		 * @return null
 		 * @access protected
 		 */
@@ -92,6 +103,7 @@
 		/**
 		 * Convenience method for retrieving a configuration setting. Uses the
 		 * CakePHP Set::classicExtract() dot notation for traversing an array.
+		 * 
 		 * @param string $path
 		 * @return mixed
 		 * @access protected
@@ -104,6 +116,7 @@
 		
 		/**
 		 * Loads up our configuration file
+		 * 
 		 * @return null
 		 * @access protected
 		 */
@@ -115,6 +128,7 @@
 		
 		/**
 		 * Checks if we have a configuration file.
+		 * 
 		 * @return boolean
 		 * @access protected
 		 */
@@ -126,6 +140,7 @@
 		
 		/**
 		 * Convenience method for returning the configuration directory
+		 * 
 		 * @return string
 		 * @access protected
 		 */
@@ -137,6 +152,7 @@
 		
 		/**
 		 * Convenience method for returning the expected configuration filename
+		 * 
 		 * @return string
 		 * @access protected
 		 */

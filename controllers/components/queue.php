@@ -1,14 +1,20 @@
 <?php
 
 	/**
-	 * Component for creating/managing outgoing emails for mailing with the
-	 * Mailer plugin system.
+	 * QueueComponent
+	 * 
+	 * Functionality for easily creating messages from controllers for the Mailer
+	 * to process. 
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.controllers.components
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class QueueComponent extends Object {
 
 		/**
 		 * Creates a Message record. Returns the ID of the new record.
+		 * 
 		 * @param string $to
 		 * @param string $from
 		 * @param string $subject
@@ -26,6 +32,7 @@
 		
 		/**
 		 * Adds a recipient to a message. Returns the ID of the new recipient.
+		 * 
 		 * @param string $message_id
 		 * @param string $recipient
 		 * @return string
@@ -40,6 +47,7 @@
 		
 		/**
 		 * Adds a variable to the message recipient.
+		 * 
 		 * @param string $message_recipient_id
 		 * @param string $key
 		 * @param mixed $value
@@ -55,6 +63,7 @@
 		
 		/**
 		 * Adds an attachment to the message recipient.
+		 * 
 		 * @param string $message_recipient_id
 		 * @param string $file
 		 * @param string $type

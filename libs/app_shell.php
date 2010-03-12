@@ -2,13 +2,21 @@
 
 	/**
 	 * AppShell
+	 * 
 	 * Provides common functionality to all shells
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.libs
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class AppShell extends Shell {
 		
 		/**
 		 * Debug
+		 * 
+		 * If we should be displaying debugging messages. This can be set to true
+		 * by simply passing -debug when starting the shell.
+		 * 
 		 * @var boolean
 		 * @access protected
 		 */
@@ -16,6 +24,10 @@
 		
 		/**
 		 * Silent
+		 * 
+		 * Passsing -silent when starting the shell will make us hide any messages
+		 * that aren't urgent (warning messages for example)
+		 * 
 		 * @var boolean
 		 * @access protected
 		 */
@@ -23,6 +35,7 @@
 		
 		/**
 		 * Models
+		 * 
 		 * @var array
 		 * @access public
 		 */
@@ -30,6 +43,7 @@
 		
 		/**
 		 * Settings
+		 * 
 		 * @var array
 		 * @access protected
 		 */
@@ -37,6 +51,7 @@
 		
 		/**
 		 * Initialize method
+		 * 
 		 * @return null
 		 * @access public
 		 */
@@ -57,6 +72,7 @@
 		
 		/**
 		 * Allow read access to our non-public member variables
+		 * 
 		 * @param string $variable
 		 * @return mixed
 		 * @access public
@@ -70,6 +86,7 @@
 		
 		/**
 		 * Displays a debug message if we're debugging and not silent.
+		 * 
 		 * @param string $message
 		 * @return null
 		 * @access public
@@ -83,6 +100,7 @@
 		
 		/**
 		 * Displays an informational message if we're not silent.
+		 * 
 		 * @param string $message
 		 * @return null
 		 * @access public
@@ -96,6 +114,7 @@
 		
 		/**
 		 * Displays a warning message.
+		 * 
 		 * @param string $message
 		 * @return null
 		 * @access public
@@ -107,6 +126,7 @@
 		
 		/**
 		 * Merges the passed $array into our member variable, $settings
+		 * 
 		 * @param array $array
 		 * @return null
 		 * @access protected
@@ -120,6 +140,7 @@
 		
 		/**
 		 * Loads the requested $model up.
+		 * 
 		 * @param string $model
 		 * @return null
 		 * @access protected

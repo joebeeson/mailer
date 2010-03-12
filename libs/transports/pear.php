@@ -2,13 +2,18 @@
 
 	/**
 	 * Mailer_Transports_Pear
+	 * 
 	 * Sends email using PEAR::Mail and PEAR::Mail_mime.
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.libs.transports
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class Mailer_Transports_Pear extends Mailer_Transport {
 
 		/**
 		 * PEAR::Mail object
+		 * 
 		 * @var Mail
 		 * @access protected
 		 */
@@ -16,6 +21,7 @@
 
 		/**
 		 * Settings
+		 * 
 		 * @var array
 		 * @access protected
 		 */
@@ -43,6 +49,7 @@
 		
 		/**
 		 * Sends the message
+		 * 
 		 * @return boolean
 		 * @access public
 		 */
@@ -65,6 +72,7 @@
 		
 		/**
 		 * Initialization method
+		 * 
 		 * @return null
 		 * @access protected
 		 */
@@ -77,6 +85,7 @@
 		/**
 		 * Convenience method for building and returning an array of headers that
 		 * represents our current Mailer_Message object.
+		 * 
 		 * @return array
 		 * @access private
 		 */
@@ -89,6 +98,7 @@
 		
 		/**
 		 * Convenience method for returning our initialized Mail object
+		 * 
 		 * @return Mail
 		 * @access private
 		 */
@@ -101,6 +111,7 @@
 		
 		/**
 		 * Returns a Mail_mime object that has been setup
+		 * 
 		 * @return Mail_mime
 		 * @access private
 		 */
@@ -115,6 +126,7 @@
 		
 		/**
 		 * Handles the construction of our PEAR::Mail_mime object
+		 * 
 		 * @return Mail_mime
 		 * @access private
 		 */
@@ -124,6 +136,7 @@
 		
 		/**
 		 * Handles the construction of our PEAR::Mail object
+		 * 
 		 * @return Mail
 		 * @access private
 		 */
@@ -138,6 +151,7 @@
 		
 		/**
 		 * Convenience method for loading our libraries. Returns true on success
+		 * 
 		 * @return boolean
 		 * @access private
 		 */

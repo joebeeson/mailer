@@ -2,13 +2,18 @@
 
 	/**
 	 * Mailer_Transports_Debug
+	 * 
 	 * Default transport used for debugging purposes.
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.libs.transports
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class Mailer_Transports_Debug extends Mailer_Transport {
 		
 		/**
 		 * Settings
+		 * 
 		 * @var array
 		 * @access protected
 		 */
@@ -25,6 +30,7 @@
 		
 		/**
 		 * Sends the current message.
+		 * 
 		 * @return boolean
 		 * @access public
 		 */
@@ -49,6 +55,7 @@
 		
 		/**
 		 * Convenience method to check if we're in a CLI environment
+		 * 
 		 * @return boolean
 		 * @access private
 		 */

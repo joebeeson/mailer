@@ -2,13 +2,18 @@
 
 	/**
 	 * DebugTask
-	 * Handles displaying the debugging messages.
+	 * 
+	 * Handles common functionality regarding debugging
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.vendors.shells.tasks
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class DebugTask extends AppShell {
 
 		/**
 		 * Displays a handful of useful debugging messages
+		 * 
 		 * @param Mailer_Message $message
 		 * @return null
 		 * @access private

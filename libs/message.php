@@ -2,13 +2,18 @@
 	
 	/**
 	 * Mailer_Message
+	 * 
 	 * Represents a message.
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.libs
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class Mailer_Message {
 		
 		/**
 		 * Attachments
+		 * 
 		 * @var array
 		 * @access protected
 		 */
@@ -16,6 +21,7 @@
 		
 		/**
 		 * Recipient
+		 * 
 		 * @var string
 		 * @access protected
 		 */
@@ -23,6 +29,7 @@
 		
 		/**
 		 * Subject
+		 * 
 		 * @var string
 		 * @access protected
 		 */
@@ -30,6 +37,7 @@
 		
 		/**
 		 * Sender
+		 * 
 		 * @var string
 		 * @access protected
 		 */
@@ -37,6 +45,7 @@
 		
 		/**
 		 * Template 
+		 * 
 		 * @var string
 		 * @access protected
 		 */
@@ -44,6 +53,7 @@
 		
 		/**
 		 * Layout
+		 * 
 		 * @var string
 		 * @access protected
 		 */
@@ -51,6 +61,7 @@
 		
 		/**
 		 * Variables
+		 * 
 		 * @var array
 		 * @access protected
 		 */
@@ -58,6 +69,7 @@
 		
 		/**
 		 * Construction method
+		 * 
 		 * @param array $message
 		 * @return null
 		 * @access public
@@ -100,6 +112,7 @@
 		
 		/**
 		 * Sets our $attachments member variable
+		 * 
 		 * @param array $attachments
 		 * @return null
 		 * @access public
@@ -110,6 +123,7 @@
 		
 		/**
 		 * Sets our $recipient member variable
+		 * 
 		 * @param string $recipient
 		 * @return null
 		 * @access public
@@ -120,6 +134,7 @@
 		
 		/**
 		 * Sets our $subject member variable
+		 * 
 		 * @param string $subject
 		 * @return null
 		 * @access public
@@ -129,6 +144,7 @@
 		}
 		/**
 		 * Sets our $sender member variable
+		 * 
 		 * @param string $sender
 		 * @return null
 		 * @access public
@@ -139,6 +155,7 @@
 		
 		/**
 		 * Sets our $template member variable
+		 * 
 		 * @param string $template
 		 * @return null
 		 * @access public
@@ -149,6 +166,7 @@
 		
 		/**
 		 * Sets our $layout member variable
+		 * 
 		 * @param string $layout
 		 * @return null
 		 * @access public
@@ -159,6 +177,7 @@
 		
 		/**
 		 * Sets our $variables member variable
+		 * 
 		 * @param string $variables
 		 * @return null
 		 * @access public
@@ -169,6 +188,7 @@
 		
 		/**
 		 * Returns the rendered HTML string
+		 * 
 		 * @return string
 		 * @access public
 		 */
@@ -178,6 +198,7 @@
 		
 		/**
 		 * Returns the rendered text string
+		 * 
 		 * @return string
 		 * @access public
 		 */
@@ -187,6 +208,7 @@
 		
 		/**
 		 * Allow read access to our variables.
+		 * 
 		 * @param string $variable
 		 * @return mixed
 		 * @access public
@@ -200,6 +222,7 @@
 		/**
 		 * Extracts and unserialize()s any MessageRecipientVariable records from
 		 * the $array we're given.
+		 * 
 		 * @param array $array
 		 * @return array
 		 * @access private

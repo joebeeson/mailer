@@ -2,13 +2,19 @@
 
 	/**
 	 * TransportTask
-	 * Handles the construction and usage of Transports
+	 * 
+	 * Handles functionality regarding the construction and use of Mailer_Transport
+	 * objects.
+	 * 
+	 * @package mailer
+	 * @subpackage mailer.vendors.shells.tasks
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class TransportTask extends AppShell {
 		
 		/**
 		 * Returns an initialized transport
+		 * 
 		 * @param string $transport
 		 * @return Mailer_Transport
 		 * @access public
@@ -25,6 +31,7 @@
 		
 		/**
 		 * Checks if the requested $transport exists
+		 * 
 		 * @param string $transport
 		 * @return boolean
 		 * @access private
@@ -37,10 +44,10 @@
 		
 		/**
 		 * Convenience method for returning the expected name of the $transport
+		 * 
 		 * @param string $transport
 		 * @return string
 		 * @access private
-		 * 
 		 */
 		private function _transportClass($transport = '') {
 			return 'Mailer_Transports_' . Inflector::camelize($transport);
@@ -58,6 +65,7 @@
 		
 		/**
 		 * Convenience method for returning the directory path for our transports
+		 * 
 		 * @return string
 		 * @access private
 		 */
@@ -69,6 +77,7 @@
 		
 		/**
 		 * Loads the requested $transport
+		 * 
 		 * @param string $transport
 		 * @return null
 		 * @access private
