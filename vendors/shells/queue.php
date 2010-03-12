@@ -88,29 +88,6 @@
 		}
 		
 		/**
-		 * Cleans up processed messages
-		 * @return null
-		 * @access public
-		 */
-		public function cleanup() {
-			extract($this->settings);
-			$messages = $this->_getProcessedMessages();
-			$this->info('Found '.count($messages).' messages for cleanup...');
-			$deleted  = 0;
-			foreach ($messages as $message) {
-				if (!$test) {
-					$this->debug('Deleting MessageRecipient '.$message['MessageRecipient']['id']);
-					if ($this->MessageRecipient->delete($message['MessageRecipient']['id'])) {
-						$deleted++;
-					}
-				} else {
-					$this->debug('Skipping deletion, in testing mode.');
-				}
-			}
-			echo $this->info('Successfully cleaned up '.$deleted.' messages');
-		}
-		
-		/**
 		 * Retrieves messages from the queue and mails them out.
 		 * @return null
 		 * @access public
@@ -127,15 +104,56 @@
 			foreach ($messages as $message) {
 				
 				// Construct the Mailer_Message, and send it out
-				$message = $this->_constructMessageObject($message);
+				$object = $this->_constructMessageObject($message);
 				
 				if (!$test) {
-					$success = $transport->sendMessage($message);
-					var_dump($success);
+					
+					// We're not in testing mode, send the message
+					if ($transport->sendMessage($object)) {
+						
+						// The mailing was successful. Set processed.
+						$message['MessageRecipient']['processed'] = 1;
+						
+					} else {
+						
+						// The mailing was unsuccessful. Increment tries.
+						$message['MessageRecipient']['tries']++;
+						
+					}
+					
+					// Save the changes back to the MessageRecipient model
+					$this->MessageRecipient->save($message['MessageRecipient']);
+					
 				} else {
+					
+					// We're in testing mode, don't actually send the message.
 					$this->debug('Testing mode, bypassing sendMessage()');
+					
 				}
 			}
+		}
+		
+		/**
+		 * Cleans up processed messages
+		 * @return null
+		 * @access public
+		 */
+		public function cleanup() {
+			extract($this->settings);
+			$messages = $this->_getProcessedMessages();
+			$this->info('Found '.count($messages).' messages for cleanup...');
+			$deleted  = 0;
+			foreach ($messages as $message) {
+				if (!$test) {
+					$this->debug('Deleting MessageRecipient '.$message['MessageRecipient']['id']);
+					if ($this->MessageRecipient->delete($message['MessageRecipient']['id'])) {
+						$deleted++;
+					}
+				} else {
+					$this->debug('Testing mode, bypassing deletion');
+				}
+			}
+			echo $this->info('Successfully cleaned up '.$deleted.' messages');
 		}
 		
 		/**
