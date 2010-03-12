@@ -38,17 +38,18 @@
 		 * @access public
 		 */
 		public $settings = array(
+		
 			// The number of messages to mail at once
-			'limit' => 50,
+			'limit' 	=> 50,
 			
 			// If we're in testing mode or not
-			'test'  => false,
+			'test'  	=> false,
 			
 			// Number of times we'll try to mail a message
-			'tries' => 3,
+			'tries' 	=> 3,
 			
 			// Directory to look for our views to use
-			'views' => 'email',
+			'views' 	=> 'email',
 			
 			// The transport to use for mailing
 			'transport' => 'debug'
@@ -60,6 +61,7 @@
 		 * @access public
 		 */
 		public function startup() {
+			
 			// Load up our required libraries
 			$libraries = realpath(dirname(__FILE__) .DS. '..' .DS. '..' .DS. 'libs');
 			require($libraries . DS . 'transport.php');
@@ -101,12 +103,12 @@
 				
 				// Construct the Mailer_Message, and send it out
 				$message = $this->_constructMessageObject($message);
-				$transport->sendMessage($message);
 				
-				/**
-				 * TODO: Lots
-				 */
-				
+				if (!$test) {
+					$success = $transport->sendMessage($message);
+				} else {
+					$this->debug('Testing mode, bypassing sendMessage()');
+				}
 			}
 		}
 		
@@ -132,8 +134,10 @@
 			extract($this->settings);
 			return $this->MessageRecipient->find('all', array(
 				'conditions' => array(
+				
 					// Only get messages that don't exceed our tries amount
 					'`MessageRecipient`.`tries` <= ' . $tries,
+					
 					// Only get messages that haven't yet been processed
 					'`MessageRecipient`.`processed`' => 0
 				),

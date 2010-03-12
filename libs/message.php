@@ -8,6 +8,13 @@
 	class Mailer_Message {
 		
 		/**
+		 * Attachments
+		 * @var array
+		 * @access protected
+		 */
+		protected $attachments = array();
+		
+		/**
 		 * Recipient
 		 * @var string
 		 * @access protected
@@ -85,6 +92,20 @@
 					$this->setLayout($layout);
 				}
 			}
+			// Set our Attachment variables
+			if (isset($message['MessageRecipientAttachment'])) {
+				$this->setAttachments($message['MessageRecipientAttachment']);
+			}
+		}
+		
+		/**
+		 * Sets our $attachments member variable
+		 * @param array $attachments
+		 * @return null
+		 * @access public
+		 */
+		public function setAttachments($attachments = array()) {
+			$this->attachments = $attachments;
 		}
 		
 		/**
