@@ -11,7 +11,7 @@
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class QueueComponent extends Object {
-
+		
 		/**
 		 * Creates a Message record. Returns the ID of the new record.
 		 * 

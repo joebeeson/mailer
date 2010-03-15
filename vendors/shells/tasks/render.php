@@ -22,6 +22,20 @@
 		protected $message;
 		
 		/**
+		 * Helpers
+		 * 
+		 * Helpers to load. You can add more helpers by passing -helpers upon
+		 * execution which is a comma separated list of helpers.
+		 * Example: -helpers Form,Javascript
+		 * 
+		 * @var array
+		 * @access protected
+		 */
+		protected $helpers = array(
+			'Html'
+		);
+		
+		/**
 		 * Path
 		 * 
 		 * The directory to look for our templates and layouts in.
@@ -43,6 +57,22 @@
 			}
 			if (!App::import('Core', array('Controller'))) {
 				throw new RuntimeException('RenderTask::initialize() could not load the Controller object');
+			}
+			$this->_inspectParameters();
+		}
+		
+		/**
+		 * Inspects the execution parameters
+		 * 
+		 * @return null
+		 * @access private
+		 */
+		private function _inspectParameters() {
+			if (array_key_exists('helpers', $this->params)) {
+				$this->helpers = array_unique(array_merge(
+					explode(',', $this->params['helpers']),
+					$this->helpers
+				));
 			}
 		}
 		
@@ -124,10 +154,10 @@
 		 * @access private
 		 */
 		private function _constructView() {
-			// Create our View object and setup our paths
-			$object = new View(new Controller());
+			$object 			= new View(new Controller());
+			$object->helpers	= $this->helpers;
 			$object->layoutPath = '..' . DS . $this->path . DS . 'layouts';
-			$object->viewPath = $this->path;
+			$object->viewPath 	= $this->path;
 			return $object;
 		}
 		

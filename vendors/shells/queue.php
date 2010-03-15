@@ -87,15 +87,6 @@
 			if ($this->settings['test']) {
 				$this->info('Entering testing mode...');
 			}
-			
-			/**
-			 * For some reason ClassRegistry is giving us AppModel in place of
-			 * the actual MessageRecipient model and I have no idea why yet. So
-			 * this gets around that and reloads our models.
-			 */
-			ClassRegistry::removeObject('message_recipient');
-			require(realpath(dirname(__FILE__).'/../../models/message_recipient.php'));
-			$this->_loadModels();
 		}
 		
 		/**
