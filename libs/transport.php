@@ -161,4 +161,17 @@
 			return Inflector::underscore($class) . '.php';
 		}
 		
+		/**
+		 * Allow read only access to our non-public member variables
+		 * 
+		 * @param string $variable
+		 * @return mixed
+		 * @access public
+		 */
+		public function __get($variable) {
+			if (isset($this->$variable)) {
+				return $this->$variable;
+			}
+		}
+		
 	}

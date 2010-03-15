@@ -98,16 +98,20 @@
 		public function process() {
 			extract($this->settings);
 			
-			// Build our Transport and retrieve eligible messages
+			// Build our Transport and toss it off to debug
 			$transport = $this->Transport->construct($transport);
+			$this->Debug->transport($transport);
+			
+			// Grab our eligible messages and echo some info
 			$messages  = $this->_getEligibleMessages();
 			$this->info('Found '.count($messages).' messages for processing...');
 			
 			// Loop through our messages and send them out
 			foreach ($messages as $message) {
 				
-				// Construct the Mailer_Message, and send it out
+				// Construct the Mailer_Message and kick it to DebugTask
 				$object = $this->_constructMessageObject($message);
+				$this->Debug->message($object);
 				
 				if (!$test) {
 					
