@@ -35,14 +35,29 @@
 		 * 
 		 * @param string $message_id
 		 * @param string $recipient
+		 * @param integer $priority
 		 * @return string
 		 */
-		public function addRecipient($message_id, $recipient) {
+		public function addRecipient($message_id, $recipient, $priority = 0) {
 			$this->MessageRecipient->create();
 			$this->MessageRecipient->save(compact(
-				'message_id', 'recipient'
+				'message_id', 'recipient', 'priority'
 			));
 			return $this->MessageRecipient->id;
+		}
+		
+		/**
+		 * Sets the priority for a specific message recipient record. Returns 
+		 * boolean for succeess.
+		 * 
+		 * @param string $message_recipient_id
+		 * @param integer $priority
+		 * @return boolean
+		 */
+		public function setPriority($message_recipient_id, $priority = 0) {
+			return $this->MessageRecipient->save(compact(
+				'message_recipient_id', 'priority'
+			));
 		}
 		
 		/**

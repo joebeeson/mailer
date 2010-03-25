@@ -32,6 +32,7 @@ class schemaSchema extends CakeSchema {
 		'recipient' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 150),
 		'tries' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'processed' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
+		'priority' => array('type' => 'string', 'null' => true, 'default' => '0', 'lenghth' => 3),
 		'modified' => array('type' => 'timestamp', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'timestamp', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),

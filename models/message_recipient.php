@@ -25,13 +25,23 @@
 		 * @var array
 		 * @access public
 		 */
-		public $hasMany   = array(
+		public $hasMany = array(
 			'MessageRecipientVariable' => array(
 				'dependent' => true
 			),
 			'MessageRecipientAttachment' => array(
 				'dependent' => true
 			)
+		);
+		
+		/**
+		 * Default ordering
+		 * 
+		 * @var array
+		 * @access public
+		 */
+		public $order = array(
+			'`MessageRecipient`.`priority` DESC'
 		);
 
 	}

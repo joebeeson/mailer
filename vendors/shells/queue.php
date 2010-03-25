@@ -104,6 +104,8 @@
 			
 			// Grab our eligible messages and echo some info
 			$messages  = $this->_getEligibleMessages();
+			pr($messages);
+			die;
 			$this->info('Found '.count($messages).' messages for processing...');
 			
 			// Loop through our messages and send them out
@@ -209,6 +211,9 @@
 					
 					// Only get messages that haven't yet been processed
 					'`MessageRecipient`.`processed`' => 0
+				),
+				'order' => array(
+					'`MessageRecipient`.`priority` DESC'
 				),
 				'contain' => array(
 					'Message'
