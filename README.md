@@ -8,6 +8,7 @@ Mailer plugin simplifies sending emails from a CakePHP application.
  * Automatic throttling
  * Easy attachment support
  * Prioritize emails
+ * Automatic retry on mailing failure
  * Interchangable transport libraries
    * PEAR::Mailer
    * <strike>Swiftmailer</strike> (<em>coming soon</em>)
