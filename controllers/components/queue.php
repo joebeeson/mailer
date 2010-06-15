@@ -25,7 +25,7 @@
 		public function createMessage($from, $subject, $template, $layout = 'default') {
 			$this->Message->create();
 			$this->Message->save(compact(
-				'to', 'from', 'subject', 'template', 'layout');
+				'to', 'from', 'subject', 'template', 'layout'
 			));
 			return $this->Message->id;
 		}
