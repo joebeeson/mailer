@@ -13,7 +13,17 @@
 	class QueueComponent extends Object {
 		
 		/**
-		 * Creates a Message record. Returns the ID of the new record.
+		 * Initializes the component and loads the required models
+		 */
+		public function initialize() {
+			$this->EmailMessage = ClassRegistry::init('Mailer.EmailMessage');
+			$this->EmailMessageRecipient = ClassRegistry::init('Mailer.EmailMessageRecipient');
+			$this->EmailMessageRecipientAttachment = ClassRegistry::init('Mailer.EmailMessageRecipientAttachment');
+			$this->EmailMessageRecipientVariable = ClassRegistry::init('Mailer.EmailMessageRecipientVariable');
+		}
+		
+		/**
+		 * Creates an EmailMessage record. Returns the ID of the new record.
 		 * 
 		 * @param string $to
 		 * @param string $from
@@ -23,11 +33,11 @@
 		 * @return string
 		 */
 		public function createMessage($from, $subject, $template, $layout = 'default') {
-			$this->Message->create();
-			$this->Message->save(compact(
+			$this->EmailMessage->create();
+			$this->EmailMessage->save(compact(
 				'to', 'from', 'subject', 'template', 'layout'
 			));
-			return $this->Message->id;
+			return $this->EmailMessage->id;
 		}
 		
 		/**
@@ -38,12 +48,12 @@
 		 * @param integer $priority
 		 * @return string
 		 */
-		public function addRecipient($message_id, $recipient, $priority = 0) {
-			$this->MessageRecipient->create();
-			$this->MessageRecipient->save(compact(
-				'message_id', 'recipient', 'priority'
+		public function addRecipient($email_message_id, $recipient, $priority = 0) {
+			$this->EmailMessageRecipient->create();
+			$this->EmailMessageRecipient->save(compact(
+				'email_message_id', 'recipient', 'priority'
 			));
-			return $this->MessageRecipient->id;
+			return $this->EmailMessageRecipient->id;
 		}
 		
 		/**
@@ -55,8 +65,8 @@
 		 * @return boolean
 		 */
 		public function setPriority($message_recipient_id, $priority = 0) {
-			return $this->MessageRecipient->save(compact(
-				'message_recipient_id', 'priority'
+			return $this->EmailMessageRecipient->save(compact(
+				'email_message_recipient_id', 'priority'
 			));
 		}
 		
@@ -70,9 +80,9 @@
 		 */
 		public function addVariable($message_recipient_id, $key, $value) {
 			$value = serialize($value);
-			$this->MessageRecipientVariable->create();
-			return $this->MessageRecipientVariable->save(compact(
-				'message_recipient_id', 'key', 'value'
+			$this->EmailMessageRecipientVariable->create();
+			return $this->EmailMessageRecipientVariable->save(compact(
+				'email_message_recipient_id', 'key', 'value'
 			));
 		}
 		
@@ -86,9 +96,9 @@
 		 * @return boolean
 		 */
 		public function addAttachment($message_recipient_id, $file, $type, $name) {
-			$this->MessageRecipientAttachment->create();
-			return $this->MessageRecipientAttachment->save(compact(
-				'message_recipient_id', 'file', 'type', 'name'
+			$this->EmailMessageRecipientAttachment->create();
+			return $this->EmailMessageRecipientAttachment->save(compact(
+				'email_message_recipient_id', 'file', 'type', 'name'
 			));
 		}
 		

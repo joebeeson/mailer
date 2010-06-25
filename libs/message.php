@@ -75,22 +75,22 @@
 		 * @access public
 		 */
 		public function __construct($message = array()) {
-			// Set our MessageRecipient variables
-			if (isset($message['MessageRecipient'])) {
-				extract($message['MessageRecipient']);
+			// Set our EmailMessageRecipient variables
+			if (isset($message['EmailMessageRecipient'])) {
+				extract($message['EmailMessageRecipient']);
 				if (isset($recipient)) {
 					$this->setRecipient($recipient);
 				}
 			}
-			// Set our MessageRecipientvariable variables
-			if (isset($message['MessageRecipientVariable'])) {
+			// Set our EmailMessageRecipientvariable variables
+			if (isset($message['EmailMessageRecipientVariable'])) {
 				$this->setVariables($this->_extractVariables(
-					$message['MessageRecipientVariable']
+					$message['EmailMessageRecipientVariable']
 				));
 			}
 			// Set our Message variables
-			if (isset($message['Message'])) {
-				extract($message['Message']);
+			if (isset($message['EmailMessage'])) {
+				extract($message['EmailMessage']);
 				if (isset($subject)) {
 					$this->setSubject($subject);
 				}
@@ -105,8 +105,8 @@
 				}
 			}
 			// Set our Attachment variables
-			if (isset($message['MessageRecipientAttachment'])) {
-				$this->setAttachments($message['MessageRecipientAttachment']);
+			if (isset($message['EmailMessageRecipientAttachment'])) {
+				$this->setAttachments($message['EmailMessageRecipientAttachment']);
 			}
 		}
 		
@@ -220,7 +220,7 @@
 		}
 		
 		/**
-		 * Extracts and unserialize()s any MessageRecipientVariable records from
+		 * Extracts and unserialize()s any EmailMessageRecipientVariable records from
 		 * the $array we're given.
 		 * 
 		 * @param array $array

@@ -9,26 +9,26 @@ class schemaSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $message_recipient_attachments = array(
+	var $email_message_recipient_attachments = array(
 		'id' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 36, 'key' => 'primary'),
-		'message_recipient_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 36),
+		'email_message_recipient_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 36),
 		'file' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 150),
 		'type' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100),
 		'indexes' => array(),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_unicode_ci', 'engine' => 'MyISAM')
 	);
-	var $message_recipient_variables = array(
+	var $email_message_recipient_variables = array(
 		'id' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 36, 'key' => 'primary'),
-		'message_recipient_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 36),
+		'email_message_recipient_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 36),
 		'key' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 150),
 		'value' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_unicode_ci', 'engine' => 'MyISAM')
 	);
-	var $message_recipients = array(
+	var $email_message_recipients = array(
 		'id' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 36, 'key' => 'primary'),
-		'message_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 36),
+		'email_message_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 36),
 		'recipient' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 150),
 		'tries' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'processed' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
@@ -38,7 +38,7 @@ class schemaSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_unicode_ci', 'engine' => 'MyISAM')
 	);
-	var $messages = array(
+	var $email_messages = array(
 		'id' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 36, 'key' => 'primary'),
 		'layout' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 150),
 		'template' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 150),

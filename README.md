@@ -15,7 +15,7 @@ Mailer plugin simplifies sending emails from a CakePHP application.
    * Debug
 
 ## Usage
-        $message_id = $this->Queue->createMessage('noreply@website.com', 'Welcome to Website.com!', 'welcome');
+        $message_id = $this->Queue->createMessage('Welcome to Website.com!', 'noreply@website.com', 'welcome');
         $this->Queue->addRecipient($message_id, 'you@email.com');
 
 ## Installation

@@ -137,13 +137,13 @@
 		private function _render(Mailer_Message $message, $type = 'text') {
 			// Construct our view and set our message variables to it
 			$view = $this->_constructView($message);
-			$view->set($message->variables);
+			//$view->set($message->variables);
+
+			$view->layoutPath = $this->path;
+			$view->layout = $message->layout;
 			
 			// Return our rendered our specific type
-			return $view->render(
-				$type . DS . $message->template, 
-				$type . DS . $message->layout
-			);
+			return $view->element($this->path . DS . $type . DS . $message->template, $message->variables, true);
 		}
 		
 		/**
@@ -156,8 +156,8 @@
 		private function _constructView() {
 			$object 			= new View(new Controller());
 			$object->helpers	= $this->helpers;
-			$object->layoutPath = '..' . DS . $this->path . DS . 'layouts';
-			$object->viewPath 	= $this->path;
+			//$object->layoutPath = '..' . DS . $this->path . DS . 'layouts';
+			//$object->viewPath 	= $this->path;
 			return $object;
 		}
 		
