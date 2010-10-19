@@ -13,8 +13,8 @@
 	interface Transport {
 
 		/**
-		 * Sends the given `\Postman\Library\Email` parameter. Returns boolean
-		 * to indicate success.
+		 * Sends the given `\Postman\Library\Email` object. Returns boolean to
+		 * indicate success of the operation.
 		 *
 		 * @param \Postman\Library\Email $email
 		 * @return boolean
