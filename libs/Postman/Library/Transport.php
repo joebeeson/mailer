@@ -9,6 +9,10 @@
 	 * actual communication with the mechanism that handles the sending of an
 	 * email.
 	 *
+	 * While it's only necessary that transport objects implement the interface,
+	 * we provide a useful starting point for most transports so its recommended
+	 * to extend from this class.
+	 *
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 * @implements \Postman\Interfaces\Transport
 	 * @abstract
@@ -24,6 +28,20 @@
 		protected $_settings = array();
 
 		/**
+		 * Construction method. Allows for an optional `$settings` parameter to
+		 * be passed off to `setSettings`
+		 *
+		 * @param array $settings
+		 * @return null
+		 * @access public
+		 * @final
+		 */
+		final public function __construct($settings = array()) {
+			$this->setSettings($settings);
+			$this->_initialize();
+		}
+
+		/**
 		 * Sets the provided `$settings` parameter to our `$_settings` member
 		 * variable.
 		 *
@@ -35,7 +53,7 @@
 		 * @access public
 		 * @final
 		 */
-		final public function setSettings($settings) {
+		final public function setSettings($settings = array()) {
 			if (!is_array($settings)) {
 				trigger_error(
 					get_class($this) . '::setSettings() expects an array'
@@ -46,6 +64,19 @@
 					$settings
 				);
 			}
+		}
+
+		/**
+		 * Initialization method called after construction to give objects a
+		 * chance to run their own startup operations.
+		 *
+		 * @return null
+		 * @access protected
+		 */
+		protected function _initialize() {
+			/**
+			 * Overridden in child classes.
+			 */
 		}
 
 	}
