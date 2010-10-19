@@ -20,7 +20,8 @@
 	abstract class Transport implements \Postman\Interfaces\Transport {
 
 		/**
-		 * Settings
+		 * Default settings. Any configuration passed to `setSettings` will
+		 * be merged into this member variable.
 		 *
 		 * @var array
 		 * @access protected
@@ -77,6 +78,22 @@
 			/**
 			 * Overridden in child classes.
 			 */
+		}
+
+		/**
+		 * Convenience method for retrieving a specific setting from the class'
+		 * `$_settings` member variable.
+		 *
+		 * @param string $name
+		 * @return mixed
+		 * @access protected
+		 * @final
+		 */
+		final protected function _getSetting($name = '') {
+			return \Set::extract(
+				$this->_settings,
+				$name
+			);
 		}
 
 	}
