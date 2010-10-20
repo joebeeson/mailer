@@ -33,6 +33,20 @@
 		}
 
 		/**
+		 * Called when attempting to access a non-visible member variable or
+		 * a member variable that doesn't exist.
+		 *
+		 * @param string $variable
+		 * @return mixed
+		 * @access public
+		 */
+		public function __get($variable) {
+			if (isset($this->$variable)) {
+				return $this->$variable;
+			}
+		}
+
+		/**
 		 * Sets the given parameter as our `$_address` member variable.
 		 *
 		 * @param string $address
