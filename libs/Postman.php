@@ -40,27 +40,20 @@
 		}
 
 		/**
-		 * Fires the given `$email` off to the transport for mailing.
-		 *
-		 * We expect that the parameter is either a `\Postman\Library\Email`
-		 * object or an array of them.
+		 * Fires the given `$email` off to the transport for mailing. Returns
+		 * boolean to indicate success.
 		 *
 		 * @param mixed $emails
-		 * @return null
+		 * @return boolean
 		 * @access public
 		 */
-		public function send($emails) {
-			if (!is_array($emails)) {
-				$emails = array($emails);
-			}
-			foreach ($emails as $email) {
-				if (!$this->__isValidEmailObject($email)) {
-					throw new InvalidArgumentException(
-						'Postman::send() expects a valid `\Postman\Library\Email` object or an array of them'
-					);
-				} else {
-					$this->_getTransport()->send($email);
-				}
+		public function send($email) {
+			if (!$this->__isValidEmailObject($email)) {
+				throw new InvalidArgumentException(
+					'Postman::send() expects a valid `\Postman\Library\Email` object'
+				);
+			} else {
+				return $this->_getTransport()->send($email);
 			}
 		}
 
@@ -79,7 +72,7 @@
 		public function setTransport($transport, $settings = array()) {
 			if (!is_object($transport)) {
 				$transport = '\Postman\Transports\\' . $transport;
-				$transport = new $transport;
+				$transport = new $transport($settings);
 			} else {
 				if (!$this->__isValidTransportObject($transport)) {
 					throw new RuntimeException(
