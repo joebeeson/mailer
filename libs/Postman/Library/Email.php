@@ -32,4 +32,40 @@
 		 */
 		protected $_attachments = array();
 
+		/**
+		 * Creates a new `Recipient` object and attaches it to our `$_recipients`
+		 * member variable. Returns the created object.
+		 *
+		 * @param string $recipient
+		 * @param string $type
+		 * @return \Postman\Library\Email\Recipient
+		 * @access public
+		 */
+		public function addRecipient($recipient, $type = 'to') {
+			$recipient = new \Postman\Library\Email\Address\Recipient(
+				$recipient,
+				$type
+			);
+			$this->_recipients[] = $recipient;
+			return $recipient;
+		}
+
+		/**
+		 * Creates a new `Attachment` object and attaches it to our `$_attachments`
+		 * member variable. Returns the created object.
+		 *
+		 * @param string $file
+		 * @param string $name
+		 * @return \Postman\Library\Email\Attachment
+		 * @access public
+		 */
+		public function addAttachment($file, $name = '') {
+			$attachment = new \Postman\Library\Email\Attachment(
+				$file,
+				$name
+			);
+			$this->_attachments[] = $attachment;
+			return $attachment;
+		}
+
 	}
