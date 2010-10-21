@@ -53,10 +53,16 @@
 					'file' => 'Postman.php'
 				)
 			);
-
-			// Set away our passed settings and start our initialization
 			$this->_settings = $settings;
-			$this->_initialize();
+			if (count($this->_settings) > 0) {
+				$transport = array_shift(array_keys($this->_settings));
+				if (is_array($this->_settings[$transport])) {
+					$settings = $this->_settings[$transport];
+				} else {
+					$settings = array();
+				}
+				$this->setTransport($transport, $settings);
+			}
 		}
 
 		/**
@@ -101,24 +107,6 @@
 		 */
 		public function setTransport($transport, $settings = array()) {
 			$this->_getPostman()->setTransport($transport, $settings);
-		}
-
-		/**
-		 * Internal initialization.
-		 *
-		 * @return null
-		 * @access protected
-		 */
-		protected function _initialize() {
-			if (count($this->_settings) > 0) {
-				$transport = array_shift(array_keys($this->_settings));
-				if (is_array($this->_settings[$transport])) {
-					$settings = $this->_settings[$transport];
-				} else {
-					$settings = array();
-				}
-				$this->setTransport($transport, $settings);
-			}
 		}
 
 		/**
