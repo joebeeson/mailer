@@ -28,15 +28,38 @@
 		protected $_name;
 
 		/**
+		 * The content type of the file
+		 *
+		 * @var string
+		 * @access protected
+		 */
+		protected $_contentType;
+
+		/**
+		 * Called when attempting to access a non-visible member variable or
+		 * a member variable that doesn't exist.
+		 *
+		 * @param string $variable
+		 * @return mixed
+		 * @access public
+		 */
+		public function __get($variable) {
+			if (isset($this->$variable)) {
+				return $this->$variable;
+			}
+		}
+
+		/**
 		 * Construction method.
 		 *
 		 * @param string $address
 		 * @return null
 		 * @access public
 		 */
-		public function __construct($file = '', $name = '') {
+		public function __construct($file = '', $name = '', $type = 'text/plain') {
 			if (!empty($file)) {
 				$this->setFile($file);
+				$this->setContentType($type);
 				if (!empty($name)) {
 					$this->setName($name);
 				} else {
@@ -60,6 +83,17 @@
 			} else {
 				$this->_file = $file;
 			}
+		}
+
+		/**
+		 * Sets the parameter as our `$_contentType` member variable.
+		 *
+		 * @param string
+		 * @return null
+		 * @access public
+		 */
+		public function setContentType($type) {
+			$this->_contentType = $type;
 		}
 
 		/**

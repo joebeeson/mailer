@@ -102,36 +102,42 @@
 		}
 
 		/**
-		 * Sets the parameter as our `$_htmlBody` member variable.
+		 * Sets the parameter as our `$_htmlBody` member variable. Returns our
+		 * object for chaining.
 		 *
 		 * @param string $string
-		 * @return null
+		 * @return \Postman\Library\Email
 		 * @access public
 		 */
 		public function setHtmlBody($string = '') {
 			$this->_htmlBody = $string;
+			return $this;
 		}
 
 		/**
-		 * Sets the parameter as our `$_textBody` member variable.
+		 * Sets the parameter as our `$_textBody` member variable. Returns our
+		 * object for chaining.
 		 *
 		 * @param string $string
-		 * @return null
+		 * @return \Postman\Library\Email
 		 * @access public
 		 */
 		public function setTextBody($string = '') {
 			$this->_textBody = $string;
+			return $this;
 		}
 
 		/**
-		 * Sets the parameter as our `$_subject` member variable.
+		 * Sets the parameter as our `$_subject` member variable. Returns our
+		 * object for chaining.
 		 *
 		 * @param string $subject
-		 * @return null
+		 * @return \Postman\Library\Email
 		 * @access public
 		 */
 		public function setSubject($subject = '') {
 			$this->_subject = $subject;
+			return $this;
 		}
 
 		/**
