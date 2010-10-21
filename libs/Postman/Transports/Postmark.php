@@ -115,11 +115,11 @@
 				$this->__buildJsonPayloadRecipients($email),
 				$this->__buildJsonPayloadAttachments($email),
 				array(
-					'From' 		=> $email->_from->_address,
-					'Subject'	=> $email->_subject,
-					'HtmlBody'	=> $email->_htmlBody,
-					'TextBody'	=> $email->_textBody,
-					'ReplyTo'	=> $email->_replyTo
+					'From' 		=> $email->getFrom()->getAddress(),
+					'Subject'	=> $email->getSubject(),
+					'HtmlBody'	=> $email->getHtmlBody(),
+					'TextBody'	=> $email->getTextBody(),
+					'ReplyTo'	=> $email->getReplyTo()
 				)
 			));
 		}
@@ -134,9 +134,9 @@
 		 */
 		private function __buildJsonPayloadRecipients(\Postman\Library\email $email) {
 			$return = array('To' => array(), 'Cc' => array(), 'Bcc' => array());
-			foreach ($email->_recipients as $recipient) {
-				if (in_array($recipient->_type, array('to', 'cc', 'bcc'))) {
-					$return[ucwords($recipient->_type)][] = $recipient->_address;
+			foreach ($email->getRecipients() as $recipient) {
+				if (in_array($recipient->getType(), array('to', 'cc', 'bcc'))) {
+					$return[ucwords($recipient->getType())][] = $recipient->getAddress();
 				}
 			}
 			return array_map(
@@ -155,12 +155,12 @@
 		 */
 		private function __buildJsonPayloadAttachments(\Postman\Library\Email $email) {
 			$return = array('Attachments' => array());
-			foreach ($email->_attachments as $attachment) {
-				$contents = base64_encode(file_get_contents($attachment->_file));
+			foreach ($email->getAttachments() as $attachment) {
+				$contents = base64_encode(file_get_contents($attachment->getFile()));
 				$return['Attachments'][] = array(
-					'Name' 			=> $attachment->_name,
+					'Name' 			=> $attachment->getName(),
 					'Content' 		=> $contents,
-					'ContentType'	=> $attachment->_contentType
+					'ContentType'	=> $attachment->getContentType()
 				);
 			}
 			return $return;

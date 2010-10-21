@@ -36,16 +36,20 @@
 		protected $_contentType;
 
 		/**
-		 * Called when attempting to access a non-visible member variable or
-		 * a member variable that doesn't exist.
+		 * Catches any requests for non-existant or non-visible methods.
 		 *
-		 * @param string $variable
+		 * @param string $method
+		 * @param array $arguments
 		 * @return mixed
 		 * @access public
+		 * @see http://php.net/manual/en/language.oop5.magic.php
 		 */
-		public function __get($variable) {
-			if (isset($this->$variable)) {
-				return $this->$variable;
+		public function __call($method, $arguments) {
+			if (substr($method, 0, 3) == 'get') {
+				$variable = '_' . lcfirst(substr($method, 3));
+				if (isset($this->$variable)) {
+					return $this->$variable;
+				}
 			}
 		}
 
