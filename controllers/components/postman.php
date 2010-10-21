@@ -93,7 +93,7 @@
 		 * @access public
 		 */
 		public function send(\Postman\Library\Email $email) {
-			$this->_getPostman()->send($email);
+			return $this->_getPostman()->send($email);
 		}
 
 		/**
