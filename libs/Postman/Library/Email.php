@@ -174,8 +174,8 @@
 		}
 
 		/**
-		 * Creates a new `Recipient` object and attaches it to our `$_recipients`
-		 * member variable. Returns the created object.
+		 * Adds a recipient to our `_recipients` member variable. Accepts
+		 * either a string and "type" or a `Recipient` object.
 		 *
 		 * @param string $recipient
 		 * @param string $type
@@ -197,10 +197,10 @@
 		}
 
 		/**
-		 * Creates a new `Attachment` object and attaches it to our `$_attachments`
-		 * member variable. Returns the created object.
+		 * Adds an attachment to our `_attachments` member variable. Accepts
+		 * a file and name or an `Attachment` object.
 		 *
-		 * @param string $file
+		 * @param mixed $file
 		 * @param string $name
 		 * @return \Postman\Library\Email\Attachment
 		 * @access public

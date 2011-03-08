@@ -43,7 +43,7 @@
 		 * Fires the given `$email` off to the transport for mailing. Returns
 		 * boolean to indicate success.
 		 *
-		 * @param mixed $emails
+		 * @param mixed $email
 		 * @return boolean
 		 * @access public
 		 */

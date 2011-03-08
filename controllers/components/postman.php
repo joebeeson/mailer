@@ -100,7 +100,7 @@
 		 * Takes the request for setting the transport and passes it along to
 		 * out current `Postman` object.
 		 *
-		 * @param string $transport
+		 * @param mixed $transport
 		 * @param array $settings
 		 * @return null
 		 * @access public
