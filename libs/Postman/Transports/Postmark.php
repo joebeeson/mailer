@@ -111,7 +111,7 @@
 				$this->__buildJsonPayloadRecipients($email),
 				$this->__buildJsonPayloadAttachments($email),
 				array(
-					'From' 		=> $email->getFrom()->getAddress(),
+					'From' 	=> $email->getFrom()->getAddress(),
 					'Subject'	=> $email->getSubject(),
 					'HtmlBody'	=> $email->getHtmlBody(),
 					'TextBody'	=> $email->getTextBody(),
