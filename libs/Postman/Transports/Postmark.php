@@ -54,21 +54,17 @@
 				array(
 					'header' => array(
 						'X-Postmark-Server-Token' 	=> $this->__getApiKey(),
-						'Content-Type'				=> 'text/json'
+						'Content-Type'				=> 'application/json'
 					)
 				)
-			));
+			), true);
 
-			/**
-			 * Inspect the response. If everything didn't go as planned we will
-			 * log a message away for debugging and then return false.
-			 */
-			if ($response->ErrorCode !== 0) {
-				\Configure::log('Postmark::send() received an API error, "' . $response->Message . '"');
-				return false;
-			} else {
-				return true;
+			if (is_array($response) and isset($response['ErrorCode'])) {
+				return $response['ErrorCode'] == 0;
 			}
+
+			// Well, something else failed. That sucks.
+			return false;
 		}
 
 		/**
