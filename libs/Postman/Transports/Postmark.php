@@ -77,7 +77,7 @@
 			// Make sure we have their API key, since its required
 			if (strlen($this->_getSetting('api-key')) == 0) {
 				throw new \InvalidArgumentException(
-					'An "api-key" setting is required'
+					'Debug::$_settings[\'api-key\'] must be present and not empty.'
 				);
 			}
 		}
