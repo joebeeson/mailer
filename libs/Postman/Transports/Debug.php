@@ -33,9 +33,10 @@
 		 * @access public
 		 */
 		public function send(\Postman\Library\Email $email) {
-
-			pr($email);
-
+			return file_put_contents(
+				tempnam($this->_getSetting('folder'), 'email-'),
+				print_r($email, true)
+			) !== false;
 		}
 
 		/**
