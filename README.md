@@ -17,10 +17,10 @@ A CakePHP 1.3+ plugin for simplifying sending emails.
 
         public $components = array(
             'Mailer.Postman' => array(
-		'Debug',
-		'Postmark' => array(
-			'api-key' => 'super-dooper-secret'
-		)
+                'Debug',
+                'Postmark' => array(
+                    'api-key' => 'super-dooper-secret'
+                )
             )
         );
 
