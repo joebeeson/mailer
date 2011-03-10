@@ -58,48 +58,19 @@
 		}
 
 		/**
-		 * Instantiates the requested `$transport` object with the provided
-		 * `$settings` and sets it to our `$_transport` member variable.
+		 * Sets the provided `$transport` as our current transport.
 		 *
-		 * The `$transport` parameter can be a string which is the name of the
-		 * transport object to setup or it can be the actual object to use.
-		 *
-		 * @param mixed $transport
-		 * @param array $settings
+		 * @param \Postman\Library\Transport $transport
 		 * @return null
 		 * @access public
 		 */
-		public function setTransport($transport, $settings = array()) {
-			if (!is_object($transport)) {
-				$transport = '\Postman\Transports\\' . $transport;
-				$transport = new $transport($settings);
-			} else {
-				if (!$this->__isValidTransportObject($transport)) {
-					throw new RuntimeException(
-						'Postman::setTransport() expects a string or valid `\Postman\Library\Transport` object'
-					);
-				}
-			}
-			$this->_transport = $transport;
-			$this->setTransportSettings($settings);
-		}
-
-		/**
-		 * Convenience method for setting the given `$settings` parameter as the
-		 * settings for the current transport.
-		 *
-		 * @param array $settings
-		 * @return null
-		 * @access public
-		 */
-		public function setTransportSettings($settings = array()) {
-			if (is_array($settings)) {
-				$this->_getTransport()->setSettings($settings);
-			} else {
-				trigger_error(
-					'Postman::setTransportSettings() expects to be passed an array'
+		public function setTransport($transport) {
+			if (!$this->__isValidTransportObject($transport)) {
+				throw new RuntimeException(
+					'Postman::setTransport() expects a string or valid `\Postman\Library\Transport` object'
 				);
 			}
+			$this->_transport = $transport;
 		}
 
 		/**
