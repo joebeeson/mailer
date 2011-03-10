@@ -59,12 +59,8 @@
 				)
 			), true);
 
-			if (is_array($response) and isset($response['ErrorCode'])) {
-				return $response['ErrorCode'] == 0;
-			}
-
-			// Well, something else failed. That sucks.
-			return false;
+			// Return our status.
+			return $this->_getHttpSocket()->response['status']['code'] === 200;
 		}
 
 		/**
