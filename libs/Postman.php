@@ -87,7 +87,7 @@
 		 * @return boolean
 		 * @access public
 		 */
-		public function send(\Postman\Library\Email $email, $transport = null) {
+		public function send($email, $transport = null) {
 			if (!is_null($transport)) {
 				$this->setTransport($transport);
 			}
@@ -143,9 +143,20 @@
 		 * @access public
 		 */
 		public function getTransport($transport) {
+
+			// Sanity checks
+			if (!is_string($transport)) {
+				throw new \InvalidArgumentException(
+					'Postman::getTransport expects a string'
+				);
+			}
+
+			// Try to automatically append the full path name.
 			if (!array_key_exists($transport, $this->_transports)) {
 				$transport = '\Postman\Transports\\' . $transport;
 			}
+
+			// Check if it exists. If so, return it.
 			if (array_key_exists($transport, $this->_transports)) {
 				return $this->_transports[$transport];
 			}
