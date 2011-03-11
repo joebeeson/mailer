@@ -121,7 +121,13 @@
 		 * @access public
 		 */
 		public function setHtmlBody($string = '') {
-			$this->_htmlBody = $string;
+			if (is_string($string)) {
+				$this->_htmlBody = $string;
+			} else {
+				throw new \InvalidArgumentException(
+					'Email::setHtmlBody expects a string.'
+				);
+			}
 			return $this;
 		}
 
@@ -134,7 +140,13 @@
 		 * @access public
 		 */
 		public function setTextBody($string = '') {
-			$this->_textBody = $string;
+			if (is_string($string)) {
+				$this->_textBody = $string;
+			} else {
+				throw new \InvalidArgumentException(
+					'Email::setTextBody expects a string.'
+				);
+			}
 			return $this;
 		}
 
@@ -142,12 +154,18 @@
 		 * Sets the parameter as our `$_subject` member variable. Returns our
 		 * object for chaining.
 		 *
-		 * @param string $subject
+		 * @param string $string
 		 * @return \Postman\Library\Email
 		 * @access public
 		 */
-		public function setSubject($subject = '') {
-			$this->_subject = $subject;
+		public function setSubject($string = '') {
+			if (is_string($string)) {
+				$this->_subject = $string;
+			} else {
+				throw new \InvalidArgumentException(
+					'Email::setSubject expects a string.'
+				);
+			}
 			return $this;
 		}
 
@@ -220,6 +238,28 @@
 			// Add the attachment and return the object.
 			$this->_attachments[] = $attachment;
 			return $attachment;
+		}
+
+		/**
+		 * Clears the `$_recipients` member variable.
+		 *
+		 * @return \Postman\Library\Email
+		 * @access public
+		 */
+		public function clearRecipients() {
+			$this->_recipients = array();
+			return $this;
+		}
+
+		/**
+		 * Clears the `$_attachments` member variable.
+		 *
+		 * @return \Postman\Library\Email
+		 * @access public
+		 */
+		public function clearAttachments() {
+			$this->_attachments = array();
+			return $this;
 		}
 
 	}
