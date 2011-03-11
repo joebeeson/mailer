@@ -3,19 +3,24 @@
 	/**
 	 * Postman
 	 *
-	 * Arbiter between the underlying structure of the `Postman` library and the
-	 * developer. Takes care of sending multiple emails through a transport and
-	 * provides a handful of methods for making the process easier.
-	 *
-	 * Usually one wouldn't make use of this class directly but instead via the
-	 * `PostmanComponent` or `PostmanTask` objects.
+	 * Primary object for interacting with the `Postman` library. Handles
+	 * the instantiation of `Transport` objects and sending mail.
 	 *
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
 	class Postman {
 
 		/**
-		 * Holds our `Transport` object
+		 * Holds any initialized transports keyed off their
+		 * name for easier reuse.
+		 *
+		 * @var array
+		 * @access protected
+		 */
+		protected $_transports = array();
+
+		/**
+		 * Holds our current `Transport` object
 		 *
 		 * @var \Postman\Library\Transport
 		 * @access protected
@@ -23,13 +28,16 @@
 		protected $_transport;
 
 		/**
-		 * Construction method.
+		 * Triggered by our extended children.
 		 *
-		 * @return null
+		 * @param array $settings
+		 * @return void
 		 * @access public
-		 * @final
 		 */
-		final public function __construct() {
+		protected function _initialize($settings = array()) {
+
+			// Bring in our autoloader.
+			$transport = null;
 			App::import(
 				'Libs',
 				'Mailer.Postman/bootstrap',
@@ -37,90 +45,111 @@
 					'file' => 'bootstrap.php'
 				)
 			);
+
+			// Loop over and create our transports.
+			foreach ($settings as $transport=>$setting) {
+				if (is_numeric($transport) and is_string($setting)) {
+					$transport = $setting;
+					$setting  = array();
+				}
+				$this->addTransport($transport, $setting);
+			}
+
+			// Be sure to attempt and set a transport.
+			$this->setTransport($transport);
 		}
 
 		/**
-		 * Fires the given `$email` off to the transport for mailing. Returns
-		 * boolean to indicate success.
+		 * Convenience method for creating a new `Email` object.
 		 *
-		 * @param mixed $email
+		 * @param string $from
+		 * @param string $subject
+		 * @return \Postman\Library\Email
+		 * @access public
+		 */
+		public function create($from = '', $subject = '') {
+			$email = new \Postman\Library\Email();
+
+			// Set the `$from` and `$subject` if available.
+			if (!empty($from)) 	{ $email->setFrom($from); }
+			if (!empty($subject)) 	{ $email->setSubject($subject); }
+
+			// Return the object
+			return $email;
+		}
+
+		/**
+		 * Takes the request to send the `$email` and passes it off to the
+		 * `Postman` object. Returns boolean to indicate success.
+		 *
+		 * @param \Postman\Library\Email $email
+		 * @param mixed $transport
 		 * @return boolean
 		 * @access public
 		 */
-		public function send($email) {
-			if (!$this->__isValidEmailObject($email)) {
+		public function send(\Postman\Library\Email $email, $transport = null) {
+			if (!is_null($transport)) {
+				$this->setTransport($transport);
+			}
+			if (is_object($email) and is_a($email, 'Postman\Library\Email')) {
+				return $this->_transport->send($email);
+			} else {
 				throw new InvalidArgumentException(
 					'Postman::send() expects a valid `\Postman\Library\Email` object'
 				);
-			} else {
-				return $this->_getTransport()->send($email);
 			}
 		}
 
 		/**
-		 * Sets the provided `$transport` as our current transport.
+		 * Takes the request for setting the transport and passes it along to
+		 * out current `Postman` object.
 		 *
-		 * @param \Postman\Library\Transport $transport
+		 * @param mixed $transport
+		 * @param array $settings
 		 * @return null
 		 * @access public
 		 */
 		public function setTransport($transport) {
-			if (!$this->__isValidTransportObject($transport)) {
-				throw new RuntimeException(
-					'Postman::setTransport() expects a string or valid `\Postman\Library\Transport` object'
-				);
-			}
-			$this->_transport = $transport;
+			$this->_transport = $this->getTransport($transport);
 		}
 
 		/**
-		 * Returns the current `$_transport` member variable if it is a valid
-		 * transport. In the event that it is not, we'll throw an exception.
+		 * Adds the given transport to our `$_transports` member variable.
 		 *
+		 * @param mixed $transport
+		 * @param array $settings
+		 * @return void
+		 * @access public
+		 */
+		public function addTransport($transport, $settings = array()) {
+			if (is_object($transport)) {
+				$this->_transports[get_class($transport)] = $transport;
+			} else {
+				$class = '\Postman\Transports\\' . $transport;
+				if (!isset($this->_transports[$class]) or !empty($settings)) {
+					$this->_transports[$class] = new $class($settings);
+				}
+			}
+
+			// Assume they want this as the primary
+			$this->setTransport($transport);
+		}
+
+		/**
+		 * Returns the requested transport, by string.
+		 *
+		 * @param string $transport
 		 * @return mixed
-		 * @access protected
+		 * @access public
 		 */
-		protected function _getTransport() {
-			if ($this->__isValidTransportObject($this->_transport)) {
-				return $this->_transport;
+		public function getTransport($transport) {
+			if (!array_key_exists($transport, $this->_transports)) {
+				$transport = '\Postman\Transports\\' . $transport;
 			}
-			throw new RuntimeException(
-				'Postman::$_transport is not an object or valid `\Postman\Library\Transport` class'
-			);
-		}
-
-		/**
-		 * Checks that the given object is a valid `Transport` object.
-		 *
-		 * @param mixed $object
-		 * @return boolean
-		 * @access private
-		 */
-		private function __isValidTransportObject($object) {
-			if (is_object($object)) {
-				return in_array(
-					'Postman\Interfaces\Transport',
-					class_implements($object)
-				);
+			if (array_key_exists($transport, $this->_transports)) {
+				return $this->_transports[$transport];
 			}
-			return false;
-		}
-
-		/**
-		 * Checks that the given object is a valid `Email` object.
-		 *
-		 * @param mixed $object
-		 * @return boolean
-		 * @access private
-		 */
-		private function __isValidEmailObject($object) {
-			if (is_object($object)) {
-				return is_a(
-					$object,
-					'Postman\Library\Email'
-				);
-			}
-			return false;
+			return null;
 		}
 
 	}
