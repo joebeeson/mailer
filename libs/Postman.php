@@ -142,7 +142,12 @@
 		 * @return mixed
 		 * @access public
 		 */
-		public function getTransport($transport) {
+		public function getTransport($transport = null) {
+
+			// Stop if it's null.
+			if (is_null($transport)) {
+				return $this->_transport;
+			}
 
 			// Sanity checks
 			if (!is_string($transport)) {
