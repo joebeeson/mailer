@@ -63,16 +63,27 @@
 		}
 
 		/**
+		 * Test for the `getTransport` method.
+		 *
+		 * @return void
+		 * @access public
+		 */
+		public function testGetTransport() {
+
+			// Sanity check.
+			$this->assertNull($this->_object->getTransport());
+		}
+
+		/**
 		 * Test for the `setTransport` method.
 		 *
 		 * @return void
 		 * @access public
 		 */
 		public function testSetTransport() {
-
-			// Postman will throw exceptions if we send it the wrong arg.
+			$this->assertFalse($this->_object->setTransport(false));
 			$this->expectException();
-			$this->_object->setTransport(false);
+			$this->_object->setTransport(new stdClass);
 		}
 
 	}
