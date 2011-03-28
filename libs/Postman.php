@@ -12,7 +12,7 @@
 
 		/**
 		 * Holds any initialized transports keyed off their
-		 * name for easier reuse.
+		 * class name for easier reuse.
 		 *
 		 * @var array
 		 * @access protected
@@ -35,7 +35,7 @@
 		 * @access public
 		 */
 		protected function _initialize($settings = array()) {
-
+			
 			// Bring in our autoloader.
 			$transport = null;
 			App::import(
@@ -91,7 +91,7 @@
 			if (!is_null($transport)) {
 				$this->setTransport($transport);
 			}
-			if (is_object($email) and is_a($email, 'Postman\Library\Email')) {
+			if ($this->_isValidEmailObject($email)) {
 				return $this->_transport->send($email);
 			} else {
 				throw new InvalidArgumentException(
@@ -101,20 +101,51 @@
 		}
 
 		/**
-		 * Takes the request for setting the transport and passes it along to
-		 * out current `Postman` object.
+		 * Sets the passed `$transport` as our current, primary transport.
 		 *
 		 * @param mixed $transport
 		 * @param array $settings
-		 * @return null
+		 * @return boolean
 		 * @access public
 		 */
 		public function setTransport($transport) {
-			$this->_transport = $this->getTransport($transport);
+			if (is_object($transport)) {
+				if (!$this->hasTransport($transport)) {
+					$this->addTransport($transport);
+				}
+				$this->_transport = $transport;
+				return true;
+			} elseif (is_string($transport)) {
+				if ($this->hasTransport($transport)) {
+					$this->_transport = $this->getTransport($transport);
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/**
-		 * Adds the given transport to our `$_transports` member variable.
+		 * Checks if `$transport` is in our `$_transports` variable.
+		 *
+		 * @param mixed $transport
+		 * @return boolean
+		 * @access public
+		 */
+		public function hasTransport($transport) {
+			if (is_string($transport)) {
+				if (!array_key_exists($transport, $this->_transports)) {
+					$transport = '\Postman\Transports\\' . $transport;
+				}
+				return array_key_exists($transport, $this->_transports);
+			} elseif (is_object($transport)) {
+				return in_array($transport, $this->_transports);
+			}
+		}
+
+		/**
+		 * Adds the given transport to our `$_transports` member variable. We
+		 * can accept a `Transport` object or a string that names an object
+		 * to instantiate.
 		 *
 		 * @param mixed $transport
 		 * @param array $settings
@@ -123,16 +154,24 @@
 		 */
 		public function addTransport($transport, $settings = array()) {
 			if (is_object($transport)) {
-				$this->_transports[get_class($transport)] = $transport;
-			} else {
-				$class = '\Postman\Transports\\' . $transport;
-				if (!isset($this->_transports[$class]) or !empty($settings)) {
-					$this->_transports[$class] = new $class($settings);
+				if ($this->_isValidTransportObject($transport)) {
+					$key = get_class($transport);
+					$value = $transport;
+				} else {
+					throw new \InvalidArgumentException(
+						'Postman::addTransport expects a valid `\Postman\Interfaces\Transport` object.'
+					);
 				}
+			} elseif (is_string($transport)) {
+				if (!class_exists($transport)) {
+					$key = '\Postman\Transports\\' . $transport;
+				} else {
+					$key = $transport;
+				}
+				$value = new $key($settings);
 			}
-
-			// Assume they want this as the primary
-			$this->setTransport($transport);
+			$this->_transports[$key] = $value;
+			return $value;
 		}
 
 		/**
@@ -167,5 +206,43 @@
 			}
 			return null;
 		}
+
+		/**
+		 * Checks if the passed `$object` is a valid `Transport`
+		 * object and returns boolean to indicate.
+		 *
+		 * @param mixed $object
+		 * @return bool
+		 * @access protected
+		 */
+		protected function _isValidTransportObject($object) {
+			if (is_object($object)) {
+				return in_array(
+					'\Postman\Interfaces\Transport',
+					class_implements($object)
+				);
+			}
+			return false;
+		}
+
+		/**
+		 * Checks if the passed `$object` is a valid `Email`Transport
+		 * object and returns boolean to indicate.
+		 *
+		 * @param mixed $object
+		 * @return bool
+		 * @access protected
+		 */
+		protected function _isValidEmailObject($object) {
+			if (is_object($object)) {
+				return is_a(
+					$object,
+					'Postman\Library\Email'
+				);
+			}
+			return false;
+		}
+
+
 
 	}
