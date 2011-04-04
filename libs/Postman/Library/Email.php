@@ -208,8 +208,10 @@
 				);
 			}
 
-			// Add the recipient and return the object.
-			$this->_recipients[] = $recipient;
+			// Add the recipient (if not already added) and return the object
+			if (!in_array($recipient, $this->_recipients)) {
+				$this->_recipients[] = $recipient;
+			}
 			return $recipient;
 		}
 
