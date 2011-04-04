@@ -62,13 +62,17 @@
 		/**
 		 * Convenience method for creating a new `Email` object.
 		 *
+		 * If the optional third parameter is passed we will use that class
+		 * instead of our default `Email` object.
+		 *
 		 * @param string $from
 		 * @param string $subject
-		 * @return \Postman\Library\Email
+		 * @param string $object
+		 * @return mixed
 		 * @access public
 		 */
-		public function create($from = '', $subject = '') {
-			$email = new \Postman\Library\Email();
+		public function create($from = '', $subject = '', $object = '\Postman\Library\Email') {
+			$email = new $object;
 
 			// Set the `$from` and `$subject` if available.
 			if (!empty($from)) 	{ $email->setFrom($from); }
@@ -242,7 +246,5 @@
 			}
 			return false;
 		}
-
-
 
 	}
