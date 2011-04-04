@@ -30,6 +30,14 @@
 		protected $_layout = 'default';
 
 		/**
+		 * The `View` object to use for rendering.
+		 *
+		 * @var string
+		 * @access protected
+		 */
+		protected $_view = 'View';
+
+		/**
 		 * Holds our view variables.
 		 *
 		 * @var array
@@ -57,6 +65,17 @@
 		 */
 		public function setLayout($layout = 'default') {
 			$this->_layout = $layout;
+		}
+
+		/**
+		 * Sets our `$_view` member variable to the passed parameter.
+		 *
+		 * @param string $view
+		 * @return void
+		 * @access public
+		 */
+		public function setView($view = 'View') {
+			$this->_view = $view;
 		}
 
 		/**
