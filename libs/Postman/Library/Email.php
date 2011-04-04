@@ -12,9 +12,8 @@
 	 * transports have a common agreement on what constitutes an email, us.
 	 *
 	 * @author Joe Beeson <jbeeson@gmail.com>
-	 * @final
 	 */
-	final class Email {
+	class Email {
 
 		/**
 		 * From
