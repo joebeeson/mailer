@@ -103,11 +103,8 @@
 		 * @access public
 		 */
 		public function getHtmlBody() {
-			/**
-			 * TODO
-			 *
-			 * Write code to render the HTML version.
-			 */
+			$object = $this->_getViewObject($this->_view, 'html');
+			return $object->render($this->_template);
 		}
 
 		/**
@@ -117,11 +114,37 @@
 		 * @access public
 		 */
 		public function getTextBody() {
-			/**
-			 * TODO
-			 *
-			 * Write code to render the text version.
-			 */
+			$object = $this->_getViewObject($this->_view, 'text');
+			return $object->render($this->_template);
+		}
+
+		/**
+		 * Returns an instantiated `View` object.
+		 *
+		 * @param string $class
+		 * @return mixed
+		 * @access protected
+		 */
+		protected function _getViewObject($class, $type) {
+			\App::import('Core', 'Controller');
+			if ($class != 'View') {
+				list($plugin, $class) = pluginSplit($class);
+				\App::import('View', $plugin . '.' . $class);
+				$class = $class . 'View';
+			} else {
+				\App::import('Core', 'View');
+			}
+
+			// Instantiate and configure the object.
+			$object = new $class(new \Controller);
+			$object->layout 	= $this->_layout;
+			$object->action 	= $this->_template;
+			$object->viewVars 	= $this->_variables;
+			$object->viewPath 	= 'email' . DS . $type;
+			$object->layoutPath = 'email' . DS . $type;
+
+			// Return the final object.
+			return $object;
 		}
 
 	}
