@@ -4,14 +4,14 @@
 	namespace Postman\Library\Email;
 
 	/**
-	 * Cake
+	 * View
 	 *
-	 * Mimics CakePHP's `EmailComponent` by utilizing a `View`
-	 * object for rendering the email contents.
+	 * Mimics CakePHP's `EmailComponent` by utilizing a `View` object
+	 * for rendering the email contents.
 	 *
 	 * @author Joe Beeson <jbeeson@gmail.com>
 	 */
-	class Cake extends \Postman\Library\Email {
+	class View extends \Postman\Library\Email {
 
 		/**
 		 * Defines which template to use.
@@ -35,7 +35,7 @@
 		 * @var array
 		 * @access protected
 		 */
-		protected $_viewVars = array();
+		protected $_variables = array();
 
 		/**
 		 * Sets our `$_template` member variable to the passed parameter.
@@ -73,7 +73,7 @@
 					$this->set($key, $value);
 				}
 			} else {
-				$this->_viewVars[$key] = $value;
+				$this->_variables[$key] = $value;
 			}
 		}
 
