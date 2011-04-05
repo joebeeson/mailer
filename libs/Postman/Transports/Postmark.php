@@ -66,14 +66,14 @@
 		/**
 		 * Initialization method, called after construction.
 		 *
-		 * @return null
+		 * @return void
 		 * @access protected
 		 */
 		protected function _initialize() {
 			// Make sure we have their API key, since its required
 			if (strlen($this->_getSetting('api-key')) == 0) {
 				throw new \InvalidArgumentException(
-					'Debug::$_settings[\'api-key\'] must be present and not empty.'
+					'Postmark::$_settings[\'api-key\'] must be present and not empty.'
 				);
 			}
 		}
