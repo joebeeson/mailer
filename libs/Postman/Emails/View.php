@@ -1,7 +1,7 @@
 <?php
 
 	// Define our namespace.
-	namespace Postman\Library\Email;
+	namespace Postman\Emails;
 
 	/**
 	 * View
