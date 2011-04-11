@@ -67,22 +67,9 @@ If you need to dynamically add transports during runtime you can do so with `add
 
 	$this->Postman->addTransport('Postmark', array('api-key' => 'secret!'));
 
-### Debug
+## Notes
 
-The `Debug` transport is really meant to, well, debug your emails. It will write a file containing the `Email` object to a folder of your choosing (_defaults to your `tmp` folder_) so that you may review it.
-
-#### Configuration
-
-* **folder** _optional_ string
-
-### Postmark
-
-The `Postmark` transport communicates with [Postmark](http://postmarkapp.com/), an online service that facilitates the handling of email.
-
-#### Configuration
-
-* **api-key** string
-* **testing** _optional_ boolean
+The wiki for the plugin contains in-depth information about various classes that can be found in the plugin.
 
 ## Advanced
 
