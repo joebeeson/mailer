@@ -71,8 +71,10 @@ If you need to dynamically add transports during runtime you can do so with `add
 
 The wiki for the plugin contains in-depth information about various classes that can be found in the plugin.
 
-## Advanced
+## Advanced / Tips
 
 Many of the commands that you can perform against an `Email` object will actually end up returning new objects which help to define their role in the email. You can keep these objects around if you plan to reuse them in later emails; this will help to limit the number of objects you're instantiating.
+
+Similar to the above, many of the commands you can perform against an `Email` object will also accept their object counterparts. For example instead of calling `addAttachment` and passing the usual parameters, you can pass it an `Attachment` object and it will operate exactly the same.
 
 All transport objects must implement the `\Postman\Interfaces\Transport` interface. If you intend on creating your own custom transport be sure to glance at the interface to figure what methods you'll need to provide. Alternatively you can simply extend from `\Postman\Library\Transport` which will bring in a variety of methods to get your class off the ground.
