@@ -1,5 +1,6 @@
 <?php
 
+	// Define our namespace.
 	namespace Postman\Transports;
 
 	/**

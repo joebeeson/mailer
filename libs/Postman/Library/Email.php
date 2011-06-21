@@ -11,7 +11,7 @@
 	 * The reason we utilize a class to abstract out the email is so that the
 	 * transports have a common agreement on what constitutes an email, us.
 	 *
-	 * @author Joe Beeson <jbeeson@gmail.com>
+	 * @author  Joe Beeson <jbeeson@gmail.com>
 	 */
 	class Email {
 
@@ -224,13 +224,20 @@
 		 * @return \Postman\Library\Email\Attachment
 		 * @access public
 		 */
-		public function addAttachment($file, $name = '') {
-			if (is_string($file)) {
-				$attachment = new \Postman\Library\Email\Attachment(
-					$file,
-					$name
-				);
-			} elseif (!is_a($file, '\Postman\Library\Email\Attachment')) {
+		public function addAttachment($attachment, $name = '') {
+			if (is_string($attachment)) {
+				if (file_exists($attachment)) {
+					$attachment = new \Postman\Library\Email\Attachment\File(
+						$attachment,
+						$name
+					);
+				} else {
+					$attachment = new \Postman\Library\Email\Attachment\String(
+						$attachment,
+						$name
+					);
+				}
+			} elseif (!is_a($attachment, '\Postman\Library\Email\Attachment')) {
 				throw new \InvalidArgumentException(
 					'Email::addAttachment expects a string or valid Attachment object.'
 				);

@@ -1,5 +1,6 @@
 <?php
 
+	// Define our namespace.
 	namespace Postman\Library\Email;
 
 	/**
@@ -8,8 +9,9 @@
 	 * Represents an email attachment.
 	 *
 	 * @author Joe Beeson <jbeeson@gmail.com>
+	 * @abstract
 	 */
-	class Attachment {
+	abstract class Attachment {
 
 		/**
 		 * The file we represent.
@@ -78,16 +80,9 @@
 		 * @param string
 		 * @return null
 		 * @access public
+		 * @abstract
 		 */
-		public function setFile($file) {
-			if (!file_exists($file)) {
-				throw new \InvalidArgumentException(
-					"'$file' does not exist"
-				);
-			} else {
-				$this->_file = $file;
-			}
-		}
+		abstract public function setFile($file);
 
 		/**
 		 * Sets the parameter as our `$_contentType` member variable.
