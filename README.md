@@ -2,6 +2,16 @@
 
 A CakePHP 1.3+ plugin for simplifying sending emails.
 
+## Features
+
+* Completely object oriented.
+* Modular, easily override/extend any core classes.
+* Easily accessible from controllers, shells.
+* Supports multiple email sending methods.
+  * Remote APIs
+  * Local MTAs
+  * Debugging
+
 ## Requirements
 
 * CakePHP 1.3
