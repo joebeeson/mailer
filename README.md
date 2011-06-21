@@ -79,7 +79,7 @@ If you need to dynamically add transports during runtime you can do so with `add
 
 ## Notes
 
-The wiki for the plugin contains in-depth information about various classes that can be found in the plugin.
+The [wiki for the plugin](https://github.com/joebeeson/mailer/wiki) contains in-depth information about various classes that can be found in the plugin.
 
 ## Advanced / Tips
 
