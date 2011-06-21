@@ -11,6 +11,9 @@ A CakePHP 1.3+ plugin for simplifying sending emails.
   * Remote APIs
   * Local MTAs
   * Debugging
+    * File system
+    * Database
+  * Queue
 
 ## Requirements
 
